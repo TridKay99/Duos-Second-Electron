@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button} from "semantic-ui-react"
-import {PlayDotaDuos} from "./PlayDotaDuos"
+import {PlayDotaDuos} from "../game-progression/PlayDotaDuos"
 import '../styling/dota-duos-home.css'
 
 export enum PlayingStatus {

@@ -1,6 +1,6 @@
 import React from 'react'
 import {HeroImages} from "./hero-image-modal/HeroImages"
-import {DotaDuosHome} from "./dota-duos-home-and-play/DotaDuosHome"
+import {DotaDuosHome} from "./dota-duos-home/DotaDuosHome"
 import {Heroes} from "./dota-data/heroes"
 import './styling/dota-duos-container.css'
 import { Tab } from 'semantic-ui-react'
