@@ -1,5 +1,5 @@
 .play_dota_duos_container {
-  height: 80vh;
+  height: 88vh;
   background: rgb(25, 32, 35);
 }
 
@@ -13,4 +13,8 @@
 
 .picked_heroes {
   height: 100px !important;
+}
+
+.center.aligned.two.wide.column {
+  padding: 0 !important;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Grid} from "semantic-ui-react"
+import {Button, Grid, Header} from "semantic-ui-react"
 import {Hero, Heroes, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
 
@@ -72,20 +72,28 @@ export class PlayDotaDuos extends React.Component<{}, State> {
     const {isReadyToPlay} = this.state
     return (
       <div className={'play_dota_duos_container'}>
-        <header className={'pick_ur_heroes'}>{playerToPick} PICK YOUR HEROES...</header>
         <Grid>
-          <Grid.Row className={'picked_heroes'}>
-            <Grid.Column width={5}>
-              {this.state.playerOneImage.map((imageUrl) => {
-                return this.createHeroImg(imageUrl)
-              })}
-            </Grid.Column>
-            <Grid.Column width={5}>
-              {this.state.playerTwoImage.map((imageUrl) => {
-                return this.createHeroImg(imageUrl)
-              })}
-            </Grid.Column>
+          <Grid.Row columns={3}>
+            <Grid.Column width={6}/>
+              <Grid.Column width={4} textAlign={'center'}>
+                <header className={'pick_ur_heroes'}>{playerToPick} PICK YOUR HEROES...</header>
+              </Grid.Column>
+            <Grid.Column width={6}/>
           </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={8} textAlign={'right'} className={'player_one_picked_heroes'}>
+                <Header textAlign={'right'} color={'grey'}>Player One</Header>
+                {this.state.playerOneImage.map((imageUrl) => {
+                  return this.createHeroImg(imageUrl)
+                })}
+              </Grid.Column>
+              <Grid.Column width={8} textAlign={'left'} className={'player_two_picked_heroes'}>
+                <Header textAlign={'left'} color={'grey'}>Player Two</Header>
+                {this.state.playerTwoImage.map((imageUrl) => {
+                  return this.createHeroImg(imageUrl)
+                })}
+              </Grid.Column>
+            </Grid.Row>
           <Grid.Row columns={3}>
             <Grid.Column width={3}/>
             <Grid.Column width={10}>
@@ -95,13 +103,19 @@ export class PlayDotaDuos extends React.Component<{}, State> {
             </Grid.Column>
             <Grid.Column width={1}/>
           </Grid.Row>
+          <Grid.Row columns={3}>
+            <Grid.Column width={7}/>
+            <Grid.Column width={2} textAlign={'center'}>
+              <Button color={'blue'}
+                      className={'ready_button'}
+                      size={'large'}
+                      content={'R E A D Y'}
+                      disabled={!isReadyToPlay}
+                      onClick={() => this.setState({gameProgression: GameProgression.GAME})}/>
+            </Grid.Column>
+            <Grid.Column width={7}/>
+          </Grid.Row>
         </Grid>
-          <Button color={'blue'}
-                  className={'play_button'}
-                  size={'large'}
-                  content={'R E A D Y'}
-                  disabled={!isReadyToPlay}
-                  onClick={() => this.setState({gameProgression: GameProgression.GAME})}/>
       </div>
     )
   }
