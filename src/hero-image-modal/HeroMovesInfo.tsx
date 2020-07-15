@@ -1,9 +1,9 @@
 import React from 'react'
 import {Header, Modal, Segment} from "semantic-ui-react"
-import {HeroMove} from "../../dota-data/moves"
+import {HeroMove} from "../dota-data/moves"
 
 type Props = {
-  move: HeroMove
+  move: HeroMove | null
 }
 
 export class HeroMovesInfo extends React.Component<Props> {
