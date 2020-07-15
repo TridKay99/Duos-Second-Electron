@@ -1,0 +1,9 @@
+.dota_duos_container {
+  height: 100vh;
+  width: 100vw;
+  width: 100vw;
+}
+
+.ui.pointing.menu .active.item {
+  color: #B44335 !important;
+}

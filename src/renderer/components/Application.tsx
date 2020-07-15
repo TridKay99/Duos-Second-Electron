@@ -1,13 +1,14 @@
 import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
+import {DotaDuosContainer} from "../../DotaDuosContainer"
 
-import CounterContainer from '../containers/CounterContainer';
+class Application extends React.Component {
 
-const Application = () => (
-    <div>
-        Hello World from Electron!
-        <CounterContainer />
-    </div>
-);
+  render() {
+    return (
+      <DotaDuosContainer/>
+    )
+  }
+}
 
 export default hot(Application);

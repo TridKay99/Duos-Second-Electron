@@ -1,0 +1,12 @@
+.play_dota_duos_container {
+  height: 80vh;
+  background: rgb(25, 32, 35);
+}
+
+.hero_button_ingame {
+  padding: 0 !important;
+}
+
+.pick_ur_heroes {
+  color: white;
+}
