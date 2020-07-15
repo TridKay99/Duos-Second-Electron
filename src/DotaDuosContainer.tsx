@@ -16,13 +16,6 @@ type State = {
 
 export class DotaDuosContainer extends React.Component<{}, State>{
 
-  tabPanes = () => {
-    return [
-      {menuItem: TabPanes.HOME, render: () => this.homeTab()},
-      {menuItem: TabPanes.HEROES, render: () => this.heroesTab()}
-    ]
-  }
-
   homeTab = () => {
    return (
      <Tab.Pane>
@@ -44,7 +37,13 @@ export class DotaDuosContainer extends React.Component<{}, State>{
   render() {
     return(
       <div className={'dota_duos_container'}>
-        <Tab menu={{pointing: true, secondary: true}} panes={this.tabPanes()} enderActiveOnly={false}/>
+        <Tab menu={{pointing: true, secondary: true}}
+             enderActiveOnly={false}
+             panes={[
+               {menuItem: TabPanes.HOME, render: () => this.homeTab()},
+               {menuItem: TabPanes.HEROES, render: () => this.heroesTab()}
+             ]}
+        />
       </div>
     )
   }
