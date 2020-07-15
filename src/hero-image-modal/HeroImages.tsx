@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Grid, Modal, Segment} from "semantic-ui-react"
-import {Hero} from "../../dota-data/heroes"
+import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import {HeroMovesInfo} from "./HeroMovesInfo"
 
 type Props = {
@@ -15,15 +15,14 @@ export class HeroImages extends React.Component<Props> {
     return (
       <React.Fragment>
         <Modal size={'fullscreen'}
-               trigger={<Button content={<img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${hero.name.toLowerCase()}_lg.png`} alt={''}/>}
+               trigger={<Button content={<img src={HeroImageUrl(hero.name, ImageSize.MEDIUM)} alt={''}/>}
                />}>
           <Modal.Header>{hero.name}</Modal.Header>
           <Grid columns={3} textAlign={'center'}>
             <Grid.Column width={3} textAlign={'center'}>
               <Segment>
                 <Modal.Content image>
-                  <img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${hero.name.toLowerCase()}_vert.jpg`}
-                       alt={''}/>
+                  <img src={HeroImageUrl(hero.name, ImageSize.VERT)} alt={''}/>
                 </Modal.Content>
               </Segment>
             </Grid.Column>

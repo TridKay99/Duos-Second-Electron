@@ -10,3 +10,7 @@
 .pick_ur_heroes {
   color: white;
 }
+
+.picked_heroes {
+  height: 100px !important;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Grid} from "semantic-ui-react"
-import {Hero, Heroes} from "../dota-data/heroes"
+import {Hero, Heroes, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
 
 export enum GameProgression {
@@ -11,26 +11,28 @@ export enum GameProgression {
 
 type State = {
   gameProgression: GameProgression
-  player1: Hero[]
-  p1img: string[]
-  player2: Hero[]
-  p2img: string[]
+  playerOne: Hero[]
+  playerOneImage: string[]
+  playerTwo: Hero[]
+  playerTwoImage: string[]
+  isReadyToPlay: boolean
 }
 
 export class PlayDotaDuos extends React.Component<{}, State> {
 
   state: State = {
     gameProgression: GameProgression.PRE_GAME,
-    player1: [],
-    p1img: [],
-    player2: [],
-    p2img: []
+    playerOne: [],
+    playerTwo: [],
+    playerOneImage: [],
+    playerTwoImage: [],
+    isReadyToPlay: false
   }
 
   chooseHeroes = (hero: Hero) => {
     return <Button className={'hero_button_ingame'}
-                   content={<img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${hero.name.toLowerCase()}_sb.png`} alt={''}/>}
-                   onClick={() => this.addToTeam(hero, `http://cdn.dota2.com/apps/dota2/images/heroes/${hero.name.toLowerCase()}_sb.png`)}
+                   content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
+                   onClick={() => this.addToTeam(hero, HeroImageUrl(hero.name, ImageSize.SMALL))}
     />
   }
 
@@ -39,40 +41,67 @@ export class PlayDotaDuos extends React.Component<{}, State> {
   }
 
   addToTeam = (hero: Hero, imageUrl: string) => {
-    if(this.state.player1.length < 2) {
-      let player1 = this.state.player1.concat([hero])
-      let p1img = this.state.p1img.concat([imageUrl])
-      this.setState({player1, p1img})
-    } else {
-      let player2 = this.state.player2.concat([hero])
-      let p2img = this.state.p2img.concat([imageUrl])
-      this.setState({player2, p2img})
+    const {playerOne, playerTwo} = this.state
+
+    if(playerOne.length === 2 && playerTwo.length === 2) {
+      return
     }
+
+    const playerOnePick = playerOne.length < 2
+
+    playerOnePick
+      ? this.addHeroToPlayerOne(hero, imageUrl)
+      : this.addHeroToPlayerTwo(hero, imageUrl)
   }
 
-  render() {
-    const playerToPick = this.state.player1.length < 2 ? 'PLAYER 1' : 'PLAYER 2'
+  addHeroToPlayerOne = (hero: Hero, imageUrl: string) => {
+    let player1heroes = this.state.playerOne.concat([hero])
+    let p1HeroImages = this.state.playerOneImage.concat([imageUrl])
+    this.setState({playerOne: player1heroes, playerOneImage: p1HeroImages})
+  }
 
+  addHeroToPlayerTwo =(hero: Hero, imageUrl: string) => {
+    let player2Heroes = this.state.playerTwo.concat([hero])
+    let p2HeroImages = this.state.playerTwoImage.concat([imageUrl])
+    this.setState({playerTwo: player2Heroes, playerTwoImage: p2HeroImages})
+  }
+
+
+  render() {
+    const playerToPick = this.state.playerOne.length < 2 ? 'PLAYER 1' : 'PLAYER 2'
+    const {isReadyToPlay} = this.state
     return (
       <div className={'play_dota_duos_container'}>
-          <header className={'pick_ur_heroes'}>{playerToPick} PICK YOUR HEROES...</header>
-          {Heroes.map((hero) => {
-            return this.chooseHeroes(hero)
-          })}
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={5}>
-                {this.state.p1img.map((imageUrl) => {
-                  return this.createHeroImg(imageUrl)
-                })}
-              </Grid.Column>
-              <Grid.Column width={5}>
-                {this.state.p2img.map((imageUrl) => {
-                  return this.createHeroImg(imageUrl)
-                })}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+        <header className={'pick_ur_heroes'}>{playerToPick} PICK YOUR HEROES...</header>
+        <Grid>
+          <Grid.Row className={'picked_heroes'}>
+            <Grid.Column width={5}>
+              {this.state.playerOneImage.map((imageUrl) => {
+                return this.createHeroImg(imageUrl)
+              })}
+            </Grid.Column>
+            <Grid.Column width={5}>
+              {this.state.playerTwoImage.map((imageUrl) => {
+                return this.createHeroImg(imageUrl)
+              })}
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={3}>
+            <Grid.Column width={3}/>
+            <Grid.Column width={10}>
+              {Heroes.map((hero) => {
+                return this.chooseHeroes(hero)
+              })}
+            </Grid.Column>
+            <Grid.Column width={1}/>
+          </Grid.Row>
+        </Grid>
+          <Button color={'blue'}
+                  className={'play_button'}
+                  size={'large'}
+                  content={'R E A D Y'}
+                  disabled={!isReadyToPlay}
+                  onClick={() => this.setState({gameProgression: GameProgression.GAME})}/>
       </div>
     )
   }
