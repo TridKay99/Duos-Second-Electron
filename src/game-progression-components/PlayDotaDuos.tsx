@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button} from "semantic-ui-react"
-import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
+import {Hero, Heroes, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
 import {GameOn} from "./GameOn"
 import {PreGame} from "./PreGame"
@@ -18,6 +18,10 @@ export type GamePlayState = {
   playerOne: Player
   playerTwo: Player
   isReadyToPlay: boolean
+  playerOneTopHero: Hero
+  playerOneBottomHero: Hero
+  playerTwoTopHero: Hero
+  playerTwoBottomHero: Hero
 }
 
 export type Player = {
@@ -37,7 +41,11 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     playerTwo: {
       heroes: [],
       heroImages: []
-    }
+    },
+    playerOneTopHero: Heroes[0],
+    playerOneBottomHero: Heroes[0],
+    playerTwoTopHero: Heroes[0],
+    playerTwoBottomHero: Heroes[0],
   }
 
   componentDidUpdate = () => {
@@ -74,6 +82,19 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     playerOnePick
       ? this.addHeroToPlayerOne(hero, imageUrl)
       : this.addHeroToPlayerTwo(hero, imageUrl)
+
+    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2) {
+
+      this.setState({
+        playerOneTopHero: playerOne.heroes[0],
+        playerOneBottomHero: playerOne.heroes[1],
+
+        playerTwoTopHero: playerTwo.heroes[0],
+        playerTwoBottomHero: playerTwo.heroes[1]
+      })
+
+      return
+    }
   }
 
   addHeroToPlayerOne = (hero: Hero, imageUrl: string) => {
@@ -85,6 +106,18 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     let setPlayerOne: Player = {
       heroes,
       heroImages
+    }
+
+    if(heroes.length === 1) {
+      this.setState({
+        playerOneTopHero: heroes[0]
+      })
+    }
+
+    if(heroes.length === 2) {
+      this.setState({
+        playerOneBottomHero: heroes[1],
+      })
     }
 
     this.setState({playerOne: setPlayerOne})
@@ -101,6 +134,18 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       heroImages
     }
 
+    if(heroes.length === 1) {
+      this.setState({
+        playerTwoTopHero: heroes[0]
+      })
+    }
+
+    if(heroes.length === 2) {
+      this.setState({
+        playerTwoBottomHero: heroes[1],
+      })
+    }
+
     this.setState({playerTwo: setPlayerTwo})
   }
 
@@ -109,7 +154,11 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       isReadyToPlay,
       gameProgression,
       playerOne,
-      playerTwo} = this.state
+      playerTwo,
+      playerOneTopHero,
+      playerOneBottomHero,
+      playerTwoTopHero,
+      playerTwoBottomHero} = this.state
 
     return (
       <div className={'play_dota_duos_container'}>
@@ -120,7 +169,11 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
                                                                    chooseHeroes={this.chooseHeroes}
                                                                    handleChange={this.handleChange}/>}
         { gameProgression === GameProgression.GAME_ON && <GameOn playerOne={playerOne}
-                                                                 playerTwo={playerTwo}/>}
+                                                                 playerTwo={playerTwo}
+                                                                 playerOneTopHero={playerOneTopHero}
+                                                                 playerOneBottomHero={playerOneBottomHero}
+                                                                 playerTwoTopHero={playerTwoTopHero}
+                                                                 playerTwoBottomHero={playerTwoBottomHero}/>}
       </div>
     )
   }
