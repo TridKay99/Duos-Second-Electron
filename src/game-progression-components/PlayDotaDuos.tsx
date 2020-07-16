@@ -119,8 +119,8 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
                                                                    isReadyToPlay={isReadyToPlay}
                                                                    chooseHeroes={this.chooseHeroes}
                                                                    handleChange={this.handleChange}/>}
-        { gameProgression === GameProgression.GAME_ON && <GameOn /> }
-        { gameProgression === GameProgression.POST_GAME && <GameOn /> }
+        { gameProgression === GameProgression.GAME_ON && <GameOn playerOne={playerOne}
+                                                                 playerTwo={playerTwo}/>}
       </div>
     )
   }
