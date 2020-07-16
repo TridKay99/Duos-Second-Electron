@@ -12,6 +12,7 @@ export enum ImageSize {
 export type Hero = {
   id: number,
   name: string,
+  heroImageUrl?: string,
   health?: number,
   armour?: number,
   healthRegen?: number,

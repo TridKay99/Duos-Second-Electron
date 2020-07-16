@@ -1,18 +1,15 @@
 import React from 'react'
 import {Button, Grid, Header} from "semantic-ui-react"
 import {Hero, Heroes} from "../dota-data/heroes"
-import {GamePlayState, GameProgression} from "./PlayDotaDuos"
+import {GamePlayState, GameProgression, Player} from "./PlayDotaDuos"
 import {RecursivePick} from "../types/RecursivePick"
 
 type Props = {
   gameProgression: GameProgression
-  playerOne: Hero[]
-  playerOneImage: string[]
-  playerTwo: Hero[]
-  playerTwoImage: string[]
+  playerOne: Player
+  playerTwo: Player
   isReadyToPlay: boolean
   chooseHeroes: (hero: Hero) => void
-  handleGameProgression: (gameProgression: GameProgression) => void
   handleChange: (delta: RecursivePick<GamePlayState>) => void
 }
 
@@ -23,7 +20,8 @@ export class PreGame extends React.Component<Props> {
   }
 
   render() {
-    const playerToPick = this.props.playerOne.length < 2 ? 'PLAYER 1' : 'PLAYER 2'
+    const {playerOne, playerTwo} = this.props
+    const playerToPick = playerOne.heroes.length < 2 ? 'PLAYER 1' : 'PLAYER 2'
 
     return (
       <Grid>
@@ -37,13 +35,13 @@ export class PreGame extends React.Component<Props> {
         <Grid.Row columns={2}>
           <Grid.Column width={8} textAlign={'right'} className={'player_one_picked_heroes'}>
             <Header textAlign={'right'} color={'grey'}>Player One</Header>
-            {this.props.playerOneImage.map((imageUrl) => {
+            {playerOne.heroImages.map((imageUrl) => {
               return this.createHeroImg(imageUrl)
             })}
           </Grid.Column>
           <Grid.Column width={8} textAlign={'left'} className={'player_two_picked_heroes'}>
             <Header textAlign={'left'} color={'grey'}>Player Two</Header>
-            {this.props.playerTwoImage.map((imageUrl) => {
+            {playerTwo.heroImages.map((imageUrl) => {
               return this.createHeroImg(imageUrl)
             })}
           </Grid.Column>

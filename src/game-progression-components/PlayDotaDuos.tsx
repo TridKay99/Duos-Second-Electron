@@ -15,26 +15,35 @@ export enum GameProgression {
 
 export type GamePlayState = {
   gameProgression: GameProgression
-  playerOne: Hero[]
-  playerOneImage: string[]
-  playerTwo: Hero[]
-  playerTwoImage: string[]
+  playerOne: Player
+  playerTwo: Player
   isReadyToPlay: boolean
+}
+
+export type Player = {
+  heroes: Hero[]
+  heroImages: string[]
 }
 
 export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
 
   state: GamePlayState = {
     gameProgression: GameProgression.PRE_GAME,
-    playerOne: [],
-    playerTwo: [],
-    playerOneImage: [],
-    playerTwoImage: [],
-    isReadyToPlay: false
+    isReadyToPlay: false,
+    playerOne: {
+      heroes: [],
+      heroImages: []
+    },
+    playerTwo: {
+      heroes: [],
+      heroImages: []
+    }
   }
 
   componentDidUpdate = () => {
-    if(this.state.playerOne.length === 2 && this.state.playerTwo.length === 2 && !this.state.isReadyToPlay) {
+    const {playerOne, playerTwo, isReadyToPlay} = this.state
+
+    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2 && !isReadyToPlay) {
       this.setState({isReadyToPlay: true})
     }
   }
@@ -57,31 +66,42 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
   addToTeam = (hero: Hero, imageUrl: string) => {
     const {playerOne, playerTwo} = this.state
 
-    if(playerOne.length === 2 && playerTwo.length === 2) {
+    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2) {
       return
     }
 
-    const playerOnePick = playerOne.length < 2
-
+    const playerOnePick = playerOne.heroes.length < 2
     playerOnePick
       ? this.addHeroToPlayerOne(hero, imageUrl)
       : this.addHeroToPlayerTwo(hero, imageUrl)
   }
 
   addHeroToPlayerOne = (hero: Hero, imageUrl: string) => {
-    let player1heroes = this.state.playerOne.concat([hero])
-    let p1HeroImages = this.state.playerOneImage.concat([imageUrl])
-    this.setState({playerOne: player1heroes, playerOneImage: p1HeroImages})
+    const {playerOne} = this.state
+
+    let heroes = playerOne.heroes.concat(hero)
+    let heroImages = playerOne.heroImages.concat(imageUrl)
+
+    let setPlayerOne: Player = {
+      heroes,
+      heroImages
+    }
+
+    this.setState({playerOne: setPlayerOne})
   }
 
   addHeroToPlayerTwo =(hero: Hero, imageUrl: string) => {
-    let player2Heroes = this.state.playerTwo.concat([hero])
-    let p2HeroImages = this.state.playerTwoImage.concat([imageUrl])
-    this.setState({playerTwo: player2Heroes, playerTwoImage: p2HeroImages})
-  }
+    const {playerTwo} = this.state
 
-  handleGameProgression = (gameProgression: GameProgression) => {
-    this.setState({gameProgression})
+    let heroes = playerTwo.heroes.concat(hero)
+    let heroImages = playerTwo.heroImages.concat(imageUrl)
+
+    let setPlayerTwo: Player = {
+      heroes,
+      heroImages
+    }
+
+    this.setState({playerTwo: setPlayerTwo})
   }
 
   render() {
@@ -89,20 +109,15 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       isReadyToPlay,
       gameProgression,
       playerOne,
-      playerTwo,
-      playerOneImage,
-      playerTwoImage } = this.state
+      playerTwo} = this.state
 
     return (
       <div className={'play_dota_duos_container'}>
         { gameProgression === GameProgression.PRE_GAME && <PreGame gameProgression={gameProgression}
                                                                    playerOne={playerOne}
-                                                                   playerOneImage={playerOneImage}
                                                                    playerTwo={playerTwo}
-                                                                   playerTwoImage={playerTwoImage}
                                                                    isReadyToPlay={isReadyToPlay}
                                                                    chooseHeroes={this.chooseHeroes}
-                                                                   handleGameProgression={this.handleGameProgression}
                                                                    handleChange={this.handleChange}/>}
         { gameProgression === GameProgression.GAME_ON && <GameOn /> }
         { gameProgression === GameProgression.POST_GAME && <GameOn /> }
