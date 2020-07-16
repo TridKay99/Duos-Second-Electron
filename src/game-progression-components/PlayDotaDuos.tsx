@@ -4,14 +4,16 @@ import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
 import {GameOn} from "./GameOn"
 import {PreGame} from "./PreGame"
+import {RecursivePick} from "../types/RecursivePick"
+import {deepStateMerge} from "../MergeUtils"
 
 export enum GameProgression {
   PRE_GAME = 'pre_game',
-  GAME_ON = 'game_ON',
+  GAME_ON = 'game_on',
   POST_GAME = 'post_game'
 }
 
-type State = {
+export type GamePlayState = {
   gameProgression: GameProgression
   playerOne: Hero[]
   playerOneImage: string[]
@@ -20,9 +22,9 @@ type State = {
   isReadyToPlay: boolean
 }
 
-export class PlayDotaDuos extends React.Component<{}, State> {
+export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
 
-  state: State = {
+  state: GamePlayState = {
     gameProgression: GameProgression.PRE_GAME,
     playerOne: [],
     playerTwo: [],
@@ -74,6 +76,14 @@ export class PlayDotaDuos extends React.Component<{}, State> {
     this.setState({gameProgression})
   }
 
+  handleChange = (delta: RecursivePick<GamePlayState>) => {
+    this.setState(deepStateMerge(delta), this.saveState)
+  }
+
+  saveState = () => {
+    this.setState(this.state)
+  }
+
   render() {
     const {
       isReadyToPlay,
@@ -82,7 +92,7 @@ export class PlayDotaDuos extends React.Component<{}, State> {
       playerTwo,
       playerOneImage,
       playerTwoImage } = this.state
-
+      
     return (
       <div className={'play_dota_duos_container'}>
         { gameProgression === GameProgression.PRE_GAME && <PreGame gameProgression={gameProgression}
@@ -92,7 +102,8 @@ export class PlayDotaDuos extends React.Component<{}, State> {
                                                                    playerTwoImage={playerTwoImage}
                                                                    isReadyToPlay={isReadyToPlay}
                                                                    chooseHeroes={this.chooseHeroes}
-                                                                   handleGameProgression={this.handleGameProgression}/>}
+                                                                   handleGameProgression={this.handleGameProgression}
+                                                                   handleChange={this.handleChange}/>}
         { gameProgression === GameProgression.GAME_ON && <GameOn /> }
         { gameProgression === GameProgression.POST_GAME && <GameOn /> }
       </div>

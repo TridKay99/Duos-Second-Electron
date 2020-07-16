@@ -1,7 +1,8 @@
 import React from 'react'
 import {Button, Grid, Header} from "semantic-ui-react"
 import {Hero, Heroes} from "../dota-data/heroes"
-import {GameProgression} from "./PlayDotaDuos"
+import {GamePlayState, GameProgression} from "./PlayDotaDuos"
+import {RecursivePick} from "../types/RecursivePick"
 
 type Props = {
   gameProgression: GameProgression
@@ -12,7 +13,9 @@ type Props = {
   isReadyToPlay: boolean
   chooseHeroes: (hero: Hero) => void
   handleGameProgression: (gameProgression: GameProgression) => void
+  handleChange: (delta: RecursivePick<GamePlayState>) => void
 }
+
 export class PreGame extends React.Component<Props> {
 
   createHeroImg = (imageUrl: string) => {
@@ -62,7 +65,7 @@ export class PreGame extends React.Component<Props> {
                     size={'large'}
                     content={'R E A D Y'}
                     disabled={!this.props.isReadyToPlay}
-                    onClick={() => this.props.handleGameProgression(GameProgression.GAME_ON)}/>
+                    onClick={() => this.props.handleChange({gameProgression: GameProgression.GAME_ON})}/>
           </Grid.Column>
           <Grid.Column width={7}/>
         </Grid.Row>

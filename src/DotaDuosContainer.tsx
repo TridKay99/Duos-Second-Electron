@@ -38,7 +38,7 @@ export class DotaDuosContainer extends React.Component<{}, State>{
     return(
       <div className={'dota_duos_container'}>
         <Tab menu={{pointing: true, secondary: true}}
-             enderActiveOnly={false}
+             enderactiveonly="false"
              panes={[
                {menuItem: TabPanes.HOME, render: () => this.homeTab()},
                {menuItem: TabPanes.HEROES, render: () => this.heroesTab()}
