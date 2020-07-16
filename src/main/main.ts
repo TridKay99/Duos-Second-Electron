@@ -19,7 +19,7 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    win = new BrowserWindow({ width: 1180, height: 820, maxWidth: 1180, maxHeight: 820 });
+    win = new BrowserWindow({ width: 1230, height: 820, maxWidth: 1180, maxHeight: 820 });
 
     if (process.env.NODE_ENV !== 'production') {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // eslint-disable-line require-atomic-updates

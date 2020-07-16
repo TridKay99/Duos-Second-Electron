@@ -82,19 +82,6 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     playerOnePick
       ? this.addHeroToPlayerOne(hero, imageUrl)
       : this.addHeroToPlayerTwo(hero, imageUrl)
-
-    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2) {
-
-      this.setState({
-        playerOneTopHero: playerOne.heroes[0],
-        playerOneBottomHero: playerOne.heroes[1],
-
-        playerTwoTopHero: playerTwo.heroes[0],
-        playerTwoBottomHero: playerTwo.heroes[1]
-      })
-
-      return
-    }
   }
 
   addHeroToPlayerOne = (hero: Hero, imageUrl: string) => {

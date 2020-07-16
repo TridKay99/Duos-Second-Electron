@@ -5,3 +5,11 @@
 .message_area {
   height: 40vh;
 }
+
+.in_game_hero_details {
+  color: white;
+}
+
+.five.wide.column {
+  margin-left: 66px;
+}
