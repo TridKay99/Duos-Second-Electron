@@ -39,6 +39,14 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     }
   }
 
+  handleChange = (delta: RecursivePick<GamePlayState>) => {
+    this.setState(deepStateMerge(delta), this.saveState)
+  }
+
+  saveState = () => {
+    this.setState(this.state)
+  }
+
   chooseHeroes = (hero: Hero) => {
     return <Button className={'hero_button_ingame'}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
@@ -76,14 +84,6 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     this.setState({gameProgression})
   }
 
-  handleChange = (delta: RecursivePick<GamePlayState>) => {
-    this.setState(deepStateMerge(delta), this.saveState)
-  }
-
-  saveState = () => {
-    this.setState(this.state)
-  }
-
   render() {
     const {
       isReadyToPlay,
@@ -92,7 +92,7 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       playerTwo,
       playerOneImage,
       playerTwoImage } = this.state
-      
+
     return (
       <div className={'play_dota_duos_container'}>
         { gameProgression === GameProgression.PRE_GAME && <PreGame gameProgression={gameProgression}
