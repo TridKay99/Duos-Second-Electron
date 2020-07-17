@@ -1,14 +1,19 @@
 import React from 'react'
-import {Player} from "./PlayDotaDuos"
+import {PlayerContent} from "./PlayDotaDuos"
 import {Button, Grid, Icon, Message, Popup, Segment} from "semantic-ui-react"
 import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/game-on.css'
 import {HeroMove} from "../dota-data/moves"
 import _ from "lodash"
 
+export enum Player {
+  ONE = 'one',
+  TWO = 'two'
+}
+
 type Props = {
-  playerOne: Player
-  playerTwo: Player
+  playerOne: PlayerContent
+  playerTwo: PlayerContent
   playerOneTopHero: Hero
   playerOneBottomHero: Hero
   playerTwoTopHero: Hero
@@ -35,12 +40,43 @@ export class GameOn extends React.Component<Props, State> {
     })
   }
 
-  renderMoveButtons = (moves: HeroMove[]) => {
-    return moves.map(move => <Button color={'blue'} content={`${move.name}`} onClick={() => this.sendBattleMessage(move.name)}/>)
+  renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
+    return moves.map((move) => {
+      console.log('this.props.playerTwoTopHero', this.props.playerTwoTopHero)
+      if(player.player === Player.ONE) {
+        return this.whoToAttack(move, attackingHero, this.props.playerTwoTopHero, this.props.playerTwoBottomHero)
+      } else {
+        return this.whoToAttack(move, attackingHero, this.props.playerOneTopHero, this.props.playerOneBottomHero)
+      }
+    })
   }
 
-  sendBattleMessage = (message: string) => {
-    const newMessage = <Message content={`${message}`} size={'small'}/>
+  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero) => {
+    return (
+      <Popup wide
+             trigger={
+               <Button color={"blue"}
+                       content={`${move.name}`}/>} on={'click'}>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Button color='blue'
+                      content={topHero.name}
+                      onClick={() => this.sendBattleMessage(move, attackingHero, topHero)} fluid />
+            </Grid.Column>
+            <Grid.Column>
+              <Button color='blue'
+                      content={bottomHero.name}
+                      onClick={() => this.sendBattleMessage(move, attackingHero, bottomHero)} fluid />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Popup>
+    )
+  }
+
+  sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedToHero: Hero) => {
+    const newMessage = <Message content={`${attackingHero.name} attacked ${attackedToHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
     let battleMessages = this.state.battleMessages.concat(newMessage)
 
     if(battleMessages.length > 9) {
@@ -77,7 +113,7 @@ export class GameOn extends React.Component<Props, State> {
               <div className={'top_left_moves_and_buttons'}>
                 <img src={HeroImageUrl(playerOne.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
                 <Button.Group vertical>
-                  {this.renderMoveButtons(this.props.playerOne.heroes[0].moves!)}
+                  {this.renderMoveButtons(this.props.playerOne.heroes[0].moves!, playerOneTopHero, playerOne)}
                 </Button.Group>
               </div>
               {/*TOP LEFT HEALTH & EXCHANGE*/}
@@ -97,9 +133,9 @@ export class GameOn extends React.Component<Props, State> {
               <br/>
               <br/>
               <div className={'bottom_left_moves_and_buttons'}>
-                <img src={HeroImageUrl(playerTwo.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
+                <img src={HeroImageUrl(playerOne.heroes[1].name, ImageSize.MEDIUM)} alt={''}/>
                 <Button.Group vertical>
-                  {this.renderMoveButtons(playerTwo.heroes[0].moves!)}
+                  {this.renderMoveButtons(playerOne.heroes[1].moves!, playerOneBottomHero, playerOne)}
                 </Button.Group>
               </div>
               {/*BOTTOM LEFT HEALTH & EXCHANGE*/}
@@ -128,9 +164,9 @@ export class GameOn extends React.Component<Props, State> {
             <Grid.Column>
               <div className={'top_right_moves_and_buttons'}>
                 <Button.Group vertical>
-                  {this.renderMoveButtons(this.props.playerOne.heroes[1].moves!)}
+                  {this.renderMoveButtons(this.props.playerOne.heroes[0].moves!, playerTwoTopHero, playerOne)}
                 </Button.Group>
-                <img src={HeroImageUrl(playerOne.heroes[1].name, ImageSize.MEDIUM)} alt={''}/>
+                <img src={HeroImageUrl(playerOne.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
               </div>
               {/*TOP RIGHT HEALTH & EXCHANGE*/}
               <div className={'right_side_health_info_container'}>
@@ -152,7 +188,7 @@ export class GameOn extends React.Component<Props, State> {
               <br/>
               <div className={'bottom_right_moves_and_buttons'}>
                 <Button.Group vertical>
-                  {this.renderMoveButtons(playerTwo.heroes[1].moves!)}
+                  {this.renderMoveButtons(playerTwo.heroes[1].moves!, playerTwoBottomHero, playerOne)}
                 </Button.Group>
                 <img src={HeroImageUrl(playerTwo.heroes[1].name, ImageSize.MEDIUM)} alt={''}/>
               </div>

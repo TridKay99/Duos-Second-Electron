@@ -2,7 +2,7 @@ import React from 'react'
 import {Button} from "semantic-ui-react"
 import {Hero, Heroes, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
-import {GameOn} from "./GameOn"
+import {GameOn, Player} from "./GameOn"
 import {PreGame} from "./PreGame"
 import {RecursivePick} from "../types/RecursivePick"
 import {deepStateMerge} from "../MergeUtils"
@@ -15,8 +15,8 @@ export enum GameProgression {
 
 export type GamePlayState = {
   gameProgression: GameProgression
-  playerOne: Player
-  playerTwo: Player
+  playerOne: PlayerContent
+  playerTwo: PlayerContent
   isReadyToPlay: boolean
   playerOneTopHero: Hero
   playerOneBottomHero: Hero
@@ -24,7 +24,8 @@ export type GamePlayState = {
   playerTwoBottomHero: Hero
 }
 
-export type Player = {
+export type PlayerContent = {
+  player: Player
   heroes: Hero[]
   heroImages: string[]
 }
@@ -36,17 +37,19 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     isReadyToPlay: false,
     playerOne: {
       //WIP REMOVE TO PICK HEROES AGAIN
-      heroes: [Heroes[1],Heroes[1],Heroes[1],Heroes[1],Heroes[1]],
+      player: Player.ONE,
+      heroes: [],
       heroImages: []
     },
     playerTwo: {
-      heroes: [Heroes[1],Heroes[1],Heroes[1],Heroes[1],Heroes[1]],
+      player: Player.TWO,
+      heroes: [],
       heroImages: []
     },
     playerOneTopHero: Heroes[0],
     playerOneBottomHero: Heroes[0],
     playerTwoTopHero: Heroes[0],
-    playerTwoBottomHero: Heroes[0],
+    playerTwoBottomHero: Heroes[0]
   }
 
   componentDidUpdate = () => {
@@ -91,7 +94,8 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     let heroes = playerOne.heroes.concat(hero)
     let heroImages = playerOne.heroImages.concat(imageUrl)
 
-    let setPlayerOne: Player = {
+    let setPlayerOne: PlayerContent = {
+      player: Player.ONE,
       heroes,
       heroImages
     }
@@ -117,7 +121,8 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     let heroes = playerTwo.heroes.concat(hero)
     let heroImages = playerTwo.heroImages.concat(imageUrl)
 
-    let setPlayerTwo: Player = {
+    let setPlayerTwo: PlayerContent = {
+      player: Player.TWO,
       heroes,
       heroImages
     }

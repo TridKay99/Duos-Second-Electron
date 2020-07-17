@@ -1,13 +1,13 @@
 import React from 'react'
 import {Button, Grid, Header} from "semantic-ui-react"
 import {Hero, Heroes} from "../dota-data/heroes"
-import {GamePlayState, GameProgression, Player} from "./PlayDotaDuos"
+import {GamePlayState, GameProgression, PlayerContent} from "./PlayDotaDuos"
 import {RecursivePick} from "../types/RecursivePick"
 
 type Props = {
   gameProgression: GameProgression
-  playerOne: Player
-  playerTwo: Player
+  playerOne: PlayerContent
+  playerTwo: PlayerContent
   isReadyToPlay: boolean
   chooseHeroes: (hero: Hero) => void
   handleChange: (delta: RecursivePick<GamePlayState>) => void
