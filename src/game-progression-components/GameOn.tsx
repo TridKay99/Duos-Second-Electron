@@ -1,9 +1,10 @@
 import React from 'react'
 import {Player} from "./PlayDotaDuos"
-import {Button, Grid, Icon, Popup, Segment} from "semantic-ui-react"
+import {Button, Grid, Icon, Message, Popup, Segment} from "semantic-ui-react"
 import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/game-on.css'
 import {HeroMove} from "../dota-data/moves"
+import _ from "lodash"
 
 type Props = {
   playerOne: Player
@@ -14,7 +15,15 @@ type Props = {
   playerTwoBottomHero: Hero
 }
 
-export class GameOn extends React.Component<Props> {
+type State = {
+  battleMessages: JSX.Element[]
+}
+
+export class GameOn extends React.Component<Props, State> {
+
+  state: State = {
+    battleMessages: []
+  }
 
   createPlayerTeamPictures = (heroes: Hero[]) => {
     return heroes.map((hero, index) => {
@@ -27,7 +36,19 @@ export class GameOn extends React.Component<Props> {
   }
 
   renderMoveButtons = (moves: HeroMove[]) => {
-    return moves.map(move => <Button color={'blue'} content={`${move.name}`}/>)
+    return moves.map(move => <Button color={'blue'} content={`${move.name}`} onClick={() => this.sendBattleMessage(move.name)}/>)
+  }
+
+  sendBattleMessage = (message: string) => {
+    const newMessage = <Message content={`${message}`} size={'small'}/>
+    let battleMessages = this.state.battleMessages.concat(newMessage)
+
+    if(battleMessages.length > 9) {
+      const toFilter = _.head(battleMessages)
+      battleMessages = battleMessages.filter(message => message !== toFilter)
+    }
+
+    this.setState({battleMessages})
   }
 
   render() {
@@ -101,7 +122,7 @@ export class GameOn extends React.Component<Props> {
             <Grid.Column>
               {/*MESSAGE AREA*/}
               <Segment>
-                {/*{this.getMessage}*/}
+                {this.state.battleMessages}
               </Segment>
             </Grid.Column>
             <Grid.Column>
