@@ -1,10 +1,9 @@
 import React from 'react'
 import {Player} from "./PlayDotaDuos"
-import {Button, Grid} from "semantic-ui-react"
+import {Button, Grid, Icon, Popup, Segment} from "semantic-ui-react"
 import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
 import '../styling/game-on.css'
 import {HeroMove} from "../dota-data/moves"
-import _ from "lodash"
 
 type Props = {
   playerOne: Player
@@ -18,7 +17,7 @@ type Props = {
 export class GameOn extends React.Component<Props> {
 
   createPlayerTeamPictures = (heroes: Hero[]) => {
-    return heroes.map((hero, index)=> {
+    return heroes.map((hero, index) => {
       return (
         <Grid.Column key={index}>
           <img src={HeroImageUrl(hero.name, ImageSize.SMALL)}/>
@@ -38,7 +37,8 @@ export class GameOn extends React.Component<Props> {
       playerOneTopHero,
       playerOneBottomHero,
       playerTwoTopHero,
-      playerTwoBottomHero } = this.props
+      playerTwoBottomHero
+    } = this.props
 
     return (
       <React.Fragment>
@@ -49,90 +49,110 @@ export class GameOn extends React.Component<Props> {
             {this.createPlayerTeamPictures(playerTwo.heroes)}
           </Grid>
         </div>
-        <Grid>
-          <Grid.Row column={4} celled>
-            <Grid.Column width={3} textAlign={'center'}>
-              <img src={HeroImageUrl(playerOne.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
+        <br/>
+        <Grid columns={3} divided>
+          <Grid.Row stretched>
+            <Grid.Column>
+              <div className={'top_left_moves_and_buttons'}>
+                <img src={HeroImageUrl(playerOne.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
+                <Button.Group vertical>
+                  {this.renderMoveButtons(this.props.playerOne.heroes[0].moves!)}
+                </Button.Group>
+              </div>
+              {/*TOP LEFT HEALTH & EXCHANGE*/}
+              <div className={'top_left_hero_exchange_and_health_info'}>
+                <Popup content={'Switch Hero'} position={'bottom center'} trigger={
+                  <Button color={'teal'}
+                          basic
+                          className={'exchange_button'}
+                          content={<Icon name={'exchange'}/>}/>
+                }/>
+                  <div className={'health_info'}>
+                    <p>Health:{playerOneTopHero.health}</p>
+                    <p>Health Regen:{playerOneTopHero.healthRegen}</p>
+                    <p>Armour:{playerOneTopHero.armour}</p>
+                  </div>
+              </div>
+              <br/>
+              <br/>
+              <div className={'bottom_left_moves_and_buttons'}>
+                <img src={HeroImageUrl(playerTwo.heroes[0].name, ImageSize.MEDIUM)} alt={''}/>
+                <Button.Group vertical>
+                  {this.renderMoveButtons(playerTwo.heroes[0].moves!)}
+                </Button.Group>
+              </div>
+              {/*BOTTOM LEFT HEALTH & EXCHANGE*/}
+              <div className={'top_left_hero_exchange_and_health_info'}>
+                <Popup content={'Switch Hero'} position={'bottom center'} trigger={
+                  <Button color={'teal'}
+                          basic
+                          className={'exchange_button'}
+                          content={<Icon name={'exchange'}/>}/>
+                }/>
+                <div className={'health_info'}>
+                  <p>Health:{playerOneBottomHero.health}</p>
+                  <p>Health Regen:{playerOneBottomHero.healthRegen}</p>
+                  <p>Armour:{playerOneBottomHero.armour}</p>
+                </div>
+              </div>
+              <br/>
+              <br/>
             </Grid.Column>
-            <Grid.Column width={6}>
-              <Button.Group vertical>
-                  {this.renderMoveButtons(this.props.playerOne.heroes[0].moves)}
-              </Button.Group>
+            <Grid.Column>
+              {/*MESSAGE AREA*/}
+              <Segment>
+                {/*{this.getMessage}*/}
+              </Segment>
             </Grid.Column>
-            <Grid.Column width={4} textAlign={'right'}>
-              <Button.Group vertical>
-                {this.renderMoveButtons(this.props.playerOne.heroes[0].moves)}
-              </Button.Group>
-            </Grid.Column>
-            <Grid.Column width={3} textAlign={'center'}>
-              <img src={HeroImageUrl(playerTwo.heroes[0].name, ImageSize.FULL)} alt={''}/>
+            <Grid.Column>
+              <div className={'top_right_moves_and_buttons'}>
+                <Button.Group vertical>
+                  {this.renderMoveButtons(this.props.playerOne.heroes[1].moves!)}
+                </Button.Group>
+                <img src={HeroImageUrl(playerOne.heroes[1].name, ImageSize.MEDIUM)} alt={''}/>
+              </div>
+              {/*TOP RIGHT HEALTH & EXCHANGE*/}
+              <div className={'right_side_health_info_container'}>
+                <div className={'right_hero_exchange_and_health_info'}>
+                  <div className={'health_info'}>
+                    <p>Health:        {playerTwoTopHero.health}</p>
+                    <p>Health Regen:  {playerTwoTopHero.healthRegen}</p>
+                    <p>Armour:        {playerTwoTopHero.armour}</p>
+                  </div>
+                  <Popup content={'Switch Hero'} position={'bottom center'} trigger={
+                    <Button color={'teal'}
+                            basic
+                            className={'exchange_button'}
+                            content={<Icon name={'exchange'}/>}/>
+                  }/>
+                </div>
+              </div>
+              <br/>
+              <br/>
+              <div className={'bottom_right_moves_and_buttons'}>
+                <Button.Group vertical>
+                  {this.renderMoveButtons(playerTwo.heroes[1].moves!)}
+                </Button.Group>
+                <img src={HeroImageUrl(playerTwo.heroes[1].name, ImageSize.MEDIUM)} alt={''}/>
+              </div>
+              {/*BOTTOM RIGHT HEALTH & EXCHANGE*/}
+              <div className={'right_side_health_info_container'}>
+                <div className={'right_hero_exchange_and_health_info'}>
+                  <div className={'health_info'}>
+                    <p>Health:        {playerTwoBottomHero.health}</p>
+                    <p>Health Regen:  {playerTwoBottomHero.healthRegen}</p>
+                    <p>Armour:        {playerTwoBottomHero.armour}</p>
+                  </div>
+                  <Popup content={'Switch Hero'} position={'bottom center'} trigger={
+                    <Button color={'teal'}
+                            basic
+                            className={'exchange_button'}
+                            content={<Icon name={'exchange'}/>}/>
+                  }/>
+                </div>
+              </div>
             </Grid.Column>
           </Grid.Row>
-            <Grid.Row columns={3}>
-              <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'right'}>
-                <p>Health</p>
-                <p>Health Regen</p>
-                <p>Armour</p>
-              </Grid.Column>
-              <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'left'}>
-                <p>{playerOneTopHero.health}</p>
-                <p>{playerOneTopHero.healthRegen}</p>
-                <p>{playerOneTopHero.armour}</p>
-              </Grid.Column>
-              <Grid.Column width={8}/>
-              <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'right'}>
-                <p>{playerTwoTopHero.health}</p>
-                <p>{playerTwoTopHero.healthRegen}</p>
-                <p>{playerTwoTopHero.armour}</p>
-              </Grid.Column>
-              <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'left'}>
-                <p>Health</p>
-                <p>Health Regen</p>
-                <p>Armour</p>
-              </Grid.Column>
-            </Grid.Row>
-          <Grid.Row/>
-          <Grid.Row column={3} celled>
-            <Grid.Column width={3} textAlign={'center'}>
-              <img src={HeroImageUrl(playerOne.heroes[1].name, ImageSize.FULL)} alt={''}/>
-            </Grid.Column>
-            <Grid.Column width={4}>
-              <Button.Group vertical>
-                {this.renderMoveButtons(this.props.playerOne.heroes[0].moves)}
-              </Button.Group>
-            </Grid.Column>
-            <Grid.Column width={6} textAlign={'right'}>
-              <Button.Group vertical>
-                {this.renderMoveButtons(this.props.playerOne.heroes[0].moves)}
-              </Button.Group>
-            </Grid.Column>
-            <Grid.Column width={3} textAlign={'center'}>
-              <img src={HeroImageUrl(playerTwo.heroes[1].name, ImageSize.FULL)} alt={''}/>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-          <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'right'}>
-            <p>Health</p>
-            <p>Health Regen</p>
-            <p>Armour</p>
-          </Grid.Column>
-          <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'left'}>
-            <p>{playerOneBottomHero.health}</p>
-            <p>{playerOneBottomHero.healthRegen}</p>
-            <p>{playerOneBottomHero.armour}</p>
-          </Grid.Column>
-          <Grid.Column width={8}/>
-          <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'right'}>
-            <p>{playerTwoBottomHero.health}</p>
-            <p>{playerOneBottomHero.healthRegen}</p>
-            <p>{playerTwoTopHero.armour}</p>
-          </Grid.Column>
-          <Grid.Column width={2} className={'in_game_hero_details'} textAlign={'left'}>
-            <p>Health</p>
-            <p>Health Regen</p>
-            <p>Armour</p>
-          </Grid.Column>
-        </Grid.Row>
         </Grid>
       </React.Fragment>
     )

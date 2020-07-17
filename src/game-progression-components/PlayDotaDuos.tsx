@@ -35,11 +35,12 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     gameProgression: GameProgression.PRE_GAME,
     isReadyToPlay: false,
     playerOne: {
-      heroes: [],
+      //WIP REMOVE TO PICK HEROES AGAIN
+      heroes: [Heroes[1],Heroes[1],Heroes[1],Heroes[1],Heroes[1]],
       heroImages: []
     },
     playerTwo: {
-      heroes: [],
+      heroes: [Heroes[1],Heroes[1],Heroes[1],Heroes[1],Heroes[1]],
       heroImages: []
     },
     playerOneTopHero: Heroes[0],
@@ -51,7 +52,7 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
   componentDidUpdate = () => {
     const {playerOne, playerTwo, isReadyToPlay} = this.state
 
-    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2 && !isReadyToPlay) {
+    if(playerOne.heroes.length === 5 && playerTwo.heroes.length === 5 && !isReadyToPlay) {
       this.setState({isReadyToPlay: true})
     }
   }
@@ -74,11 +75,11 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
   addToTeam = (hero: Hero, imageUrl: string) => {
     const {playerOne, playerTwo} = this.state
 
-    if(playerOne.heroes.length === 2 && playerTwo.heroes.length === 2) {
+    if(playerOne.heroes.length === 5 && playerTwo.heroes.length === 5) {
       return
     }
 
-    const playerOnePick = playerOne.heroes.length < 2
+    const playerOnePick = playerOne.heroes.length < 5
     playerOnePick
       ? this.addHeroToPlayerOne(hero, imageUrl)
       : this.addHeroToPlayerTwo(hero, imageUrl)

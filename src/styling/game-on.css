@@ -13,3 +13,57 @@
 .five.wide.column {
   margin-left: 66px;
 }
+
+
+/*LEFT SIDE*/
+.top_left_moves_and_buttons {
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.bottom_left_moves_and_buttons {
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.top_left_hero_exchange_and_health_info {
+  color: white;
+  display:flex;
+  justify-content: space-evenly !important;
+  align-items: center;
+  width: 70%
+}
+
+/*RIGHT SIDE*/
+.top_right_moves_and_buttons {
+  display: flex;
+}
+
+.bottom_right_moves_and_buttons {
+  display: flex;
+}
+
+.right_side_health_info_container {
+  display:flex;
+  justify-content: flex-end;
+}
+
+.right_hero_exchange_and_health_info {
+  color: white;
+  display:flex;
+  justify-content: space-evenly !important;
+  align-items: center;
+  width: 70%;
+}
+
+
+
+
+.health_info {
+  display: flex;
+  flex-direction: column;
+}
+
+.exchange_button {
+  height: 40px !important;
+}
