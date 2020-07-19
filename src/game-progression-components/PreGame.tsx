@@ -21,7 +21,7 @@ export class PreGame extends React.Component<Props> {
 
   render() {
     const {playerOne, playerTwo} = this.props
-    const playerToPick = playerOne.heroes.length < 2 ? 'PLAYER 1' : 'PLAYER 2'
+    const playerToPick = playerOne.heroes.length < 5 ? 'PLAYER 1' : 'PLAYER 2'
 
     return (
       <Grid>

@@ -7,6 +7,11 @@ import {PreGame} from "./PreGame"
 import {RecursivePick} from "../types/RecursivePick"
 import {deepStateMerge} from "../MergeUtils"
 
+export type ActiveHeroes = {
+  top: Hero | null
+  bottom: Hero | null
+}
+
 export enum GameProgression {
   PRE_GAME = 'pre_game',
   GAME_ON = 'game_on',
@@ -18,16 +23,13 @@ export type GamePlayState = {
   playerOne: PlayerContent
   playerTwo: PlayerContent
   isReadyToPlay: boolean
-  playerOneTopHero: Hero
-  playerOneBottomHero: Hero
-  playerTwoTopHero: Hero
-  playerTwoBottomHero: Hero
 }
 
 export type PlayerContent = {
   player: Player
   heroes: Hero[]
   heroImages: string[]
+  activeHeroes: ActiveHeroes
 }
 
 export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
@@ -39,17 +41,21 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       //WIP REMOVE TO PICK HEROES AGAIN
       player: Player.ONE,
       heroes: [],
-      heroImages: []
+      heroImages: [],
+      activeHeroes: {
+        top: null,
+        bottom: null
+      }
     },
     playerTwo: {
       player: Player.TWO,
       heroes: [],
-      heroImages: []
-    },
-    playerOneTopHero: Heroes[0],
-    playerOneBottomHero: Heroes[0],
-    playerTwoTopHero: Heroes[0],
-    playerTwoBottomHero: Heroes[0]
+      heroImages: [],
+      activeHeroes: {
+        top: null,
+        bottom: null
+      }
+    }
   }
 
   componentDidUpdate = () => {
@@ -94,22 +100,23 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     let heroes = playerOne.heroes.concat(hero)
     let heroImages = playerOne.heroImages.concat(imageUrl)
 
-    let setPlayerOne: PlayerContent = {
-      player: Player.ONE,
-      heroes,
-      heroImages
-    }
-
-    if(heroes.length === 1) {
-      this.setState({
-        playerOneTopHero: heroes[0]
-      })
+    let activeHeroes: ActiveHeroes = {
+      top: this.state.playerOne.activeHeroes.top,
+      bottom: this.state.playerOne.activeHeroes.bottom
     }
 
     if(heroes.length === 2) {
-      this.setState({
-        playerOneBottomHero: heroes[1],
-      })
+      activeHeroes = {
+        top: heroes[0],
+        bottom: heroes[1]
+      }
+    }
+
+    let setPlayerOne: PlayerContent = {
+      player: Player.ONE,
+      heroes,
+      heroImages,
+      activeHeroes
     }
 
     this.setState({playerOne: setPlayerOne})
@@ -120,23 +127,22 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
 
     let heroes = playerTwo.heroes.concat(hero)
     let heroImages = playerTwo.heroImages.concat(imageUrl)
-
-    let setPlayerTwo: PlayerContent = {
-      player: Player.TWO,
-      heroes,
-      heroImages
-    }
-
-    if(heroes.length === 1) {
-      this.setState({
-        playerTwoTopHero: heroes[0]
-      })
+    let activeHeroes: ActiveHeroes = {
+      top: this.state.playerTwo.activeHeroes.top,
+      bottom: this.state.playerTwo.activeHeroes.bottom
     }
 
     if(heroes.length === 2) {
-      this.setState({
-        playerTwoBottomHero: heroes[1],
-      })
+      activeHeroes = {
+        top: heroes[0],
+        bottom: heroes[1]
+      }
+    }
+    let setPlayerTwo: PlayerContent = {
+      player: Player.TWO,
+      heroes,
+      heroImages,
+      activeHeroes
     }
 
     this.setState({playerTwo: setPlayerTwo})
@@ -147,12 +153,8 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       isReadyToPlay,
       gameProgression,
       playerOne,
-      playerTwo,
-      playerOneTopHero,
-      playerOneBottomHero,
-      playerTwoTopHero,
-      playerTwoBottomHero} = this.state
-
+      playerTwo} = this.state
+    
     return (
       <div className={'play_dota_duos_container'}>
         { gameProgression === GameProgression.PRE_GAME && <PreGame gameProgression={gameProgression}
@@ -163,10 +165,7 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
                                                                    handleChange={this.handleChange}/>}
         { gameProgression === GameProgression.GAME_ON && <GameOn playerOne={playerOne}
                                                                  playerTwo={playerTwo}
-                                                                 playerOneTopHero={playerOneTopHero}
-                                                                 playerOneBottomHero={playerOneBottomHero}
-                                                                 playerTwoTopHero={playerTwoTopHero}
-                                                                 playerTwoBottomHero={playerTwoBottomHero}/>}
+                                                                 handleChange={this.handleChange}/>}
       </div>
     )
   }

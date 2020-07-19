@@ -1,3 +1,5 @@
+import {Hero} from "./heroes"
+
 export type HeroMove = {
   name: string
   moveTypes: MoveType[]
@@ -9,6 +11,8 @@ export type HeroMove = {
 export enum MoveType {
   DAMAGE = 'damage',
   HEAL = 'heal',
+  SLOW = 'slow',
+  STUN = 'stun',
   SHIELD = 'shield',
   TAUNT = 'taunt',
   BUFF = 'buff',
@@ -103,7 +107,37 @@ const CullingBlade: HeroMove = {
   description: 'Kills anyone instantly below 100 health or deals 60 damage'
 }
 
+//BEASTMASTER
+const WildAxes: HeroMove = {
+  name: "Wild Axes",
+  damage: 30,
+  moveTypes: [MoveType.DAMAGE],
+  description: 'Deals 30 damage to both enemies'
+}
+
+const CallOfTheWild: HeroMove = {
+  name: "Call of the Wild",
+  damage: 20,
+  moveTypes: [MoveType.DAMAGE, MoveType.SLOW],
+  description: 'Deals 20 damage and slows the enemy for 2 turns'
+}
+
+const InnerBeast: HeroMove = {
+  name: "Inner Beast",
+  damage: 20,
+  moveTypes: [MoveType.BUFF],
+  description: 'Increases teams speed for 3 turns'
+}
+
+const PrimalRoar: HeroMove = {
+  name: "Primal Roar",
+  damage: 20,
+  moveTypes: [MoveType.DAMAGE, MoveType.STUN, MoveType.ULTIMATE],
+  description: 'Deals 20 damage and slows the enemy for 2 turns'
+}
+
 
 export const AbbadonMoves = {MistCoil, AphoticSheild, CurseOfAvernus, BorrowedTime}
 export const AlchemistMoves = {AcidSpray, UnstableConcoction, GreevilsGreed, ChemicalRage}
 export const AxeMoves = {BeserkersCall, BattleHunger, CounterHelix, CullingBlade}
+export const BeastMasterMoves = {WildAxes, CallOfTheWild, InnerBeast, PrimalRoar}
