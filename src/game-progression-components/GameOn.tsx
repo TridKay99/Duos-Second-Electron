@@ -123,12 +123,11 @@ export class GameOn extends React.Component<Props, State> {
                   </div>
                   {/*TOP LEFT HEALTH & EXCHANGE*/}
                   <div className={'top_left_hero_exchange_and_health_info'}>
-                    <Popup content={'Switch Hero'} position={'bottom center'} trigger={
-                      <Button color={'teal'}
-                              basic
-                              className={'exchange_button'}
-                              content={<Icon name={'exchange'}/>}/>
-                    }/>
+                    <SwitchHeroButton player={this.props.playerOne}
+                                      heroBeingSwitched={playerOneTopHero}
+                                      handleChange={this.props.handleChange}
+                                      battlePosition={BattlePosition.TOP}
+                    />
                     <div className={'health_info'}>
                       <p>Health:{playerOneTopHero.health}</p>
                       <p>Health Regen:{playerOneTopHero.healthRegen}</p>
@@ -145,12 +144,11 @@ export class GameOn extends React.Component<Props, State> {
                   </div>
                   {/*BOTTOM LEFT HEALTH & EXCHANGE*/}
                   <div className={'top_left_hero_exchange_and_health_info'}>
-                    <Popup content={'Switch Hero'} position={'bottom center'} trigger={
-                      <Button color={'teal'}
-                              basic
-                              className={'exchange_button'}
-                              content={<Icon name={'exchange'}/>}/>
-                    }/>
+                    <SwitchHeroButton player={this.props.playerOne}
+                                      heroBeingSwitched={playerOneBottomHero}
+                                      handleChange={this.props.handleChange}
+                                      battlePosition={BattlePosition.BOTTOM}
+                    />
                     <div className={'health_info'}>
                       <p>Health:{playerOneBottomHero.health}</p>
                       <p>Health Regen:{playerOneBottomHero.healthRegen}</p>
@@ -181,12 +179,11 @@ export class GameOn extends React.Component<Props, State> {
                         <p>Health Regen:  {playerTwoTopHero.healthRegen}</p>
                         <p>Armour:        {playerTwoTopHero.armour}</p>
                       </div>
-                      <Popup content={'Switch Hero'} position={'bottom center'} trigger={
-                        <Button color={'teal'}
-                                basic
-                                className={'exchange_button'}
-                                content={<Icon name={'exchange'}/>}/>
-                      }/>
+                      <SwitchHeroButton player={this.props.playerTwo}
+                                        heroBeingSwitched={playerTwoTopHero}
+                                        handleChange={this.props.handleChange}
+                                        battlePosition={BattlePosition.TOP}
+                      />
                     </div>
                   </div>
                   <br/>

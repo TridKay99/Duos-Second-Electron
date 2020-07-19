@@ -154,7 +154,7 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
       gameProgression,
       playerOne,
       playerTwo} = this.state
-    
+
     return (
       <div className={'play_dota_duos_container'}>
         { gameProgression === GameProgression.PRE_GAME && <PreGame gameProgression={gameProgression}

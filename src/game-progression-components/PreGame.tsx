@@ -62,7 +62,7 @@ export class PreGame extends React.Component<Props> {
                     className={'ready_button'}
                     size={'large'}
                     content={'R E A D Y'}
-                    // disabled={!this.props.isReadyToPlay}
+                    disabled={!this.props.isReadyToPlay}
                     onClick={() => this.props.handleChange({gameProgression: GameProgression.GAME_ON})}/>
           </Grid.Column>
           <Grid.Column width={7}/>

@@ -4,6 +4,7 @@ import {GamePlayState, PlayerContent} from "../PlayDotaDuos"
 import {Hero, HeroImageUrl, ImageSize} from "../../dota-data/heroes"
 import {RecursivePick} from "../../types/RecursivePick"
 import {BattlePosition, Player} from "../GameOn"
+import _ from "lodash"
 
 type Props = {
   player: PlayerContent
@@ -23,8 +24,9 @@ export class SwitchHeroButton extends React.Component<Props, State> {
   }
 
   renderHeroButtonsForSwitch = (hero: Hero) => {
+
     return <Button className={'hero_button_ingame'}
-                   disabled={this.isHeroInPlay(hero)}
+                   disabled={_.isEqual(hero, this.props.player.activeHeroes.top) || _.isEqual(hero, this.props.player.activeHeroes.bottom)}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
                    onClick={() => this.onSwapHero(hero)}
     />
@@ -41,10 +43,6 @@ export class SwitchHeroButton extends React.Component<Props, State> {
         this.setState({isSwapHeroModalOpen: false})
       }
     }
-  }
-
-  isHeroInPlay = (hero: Hero): boolean => {
-    return this.props.player.activeHeroes.top === hero || this.props.player.activeHeroes.bottom === hero
   }
 
 
