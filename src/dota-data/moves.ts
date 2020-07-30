@@ -1,23 +1,5 @@
-import {Hero} from "./heroes"
-
-export type HeroMove = {
-  name: string
-  moveTypes: MoveType[]
-  description: string
-  damage?: number
-  heal?: number
-}
-
-export enum MoveType {
-  DAMAGE = 'damage',
-  HEAL = 'heal',
-  SLOW = 'slow',
-  STUN = 'stun',
-  SHIELD = 'shield',
-  TAUNT = 'taunt',
-  BUFF = 'buff',
-  ULTIMATE = 'ultimate'
-}
+import {HeroMove} from "../types/HeroMove"
+import {MoveType} from "../enums/MoveType"
 
 //ABBADON
 const MistCoil: HeroMove = {

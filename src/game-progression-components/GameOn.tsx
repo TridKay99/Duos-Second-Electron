@@ -1,12 +1,16 @@
 import React from 'react'
-import {ActiveHeroes, GamePlayState, PlayerContent} from "./PlayDotaDuos"
-import {Button, Grid, Icon, Message, Popup, Segment} from "semantic-ui-react"
-import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
+import {GamePlayState, PlayerContent} from "./PlayDotaDuos"
+import {Button, Grid, Message, Popup, Segment} from "semantic-ui-react"
+import {HeroImageUrl} from "../dota-data/heroes"
 import '../styling/game-on.css'
-import {HeroMove} from "../dota-data/moves"
 import _ from "lodash"
 import {SwitchHeroButton} from "./game-board/SwitchHeroButton"
 import {RecursivePick} from "../types/RecursivePick"
+import {MoveDamageService} from "../services/MoveDamageService"
+import {Hero} from "../types/Hero"
+import {ImageSize} from "../enums/ImageSize"
+import {HeroMove} from "../types/HeroMove"
+import {MoveType} from "../enums/MoveType"
 
 export enum Player {
   ONE = 'one',
@@ -46,15 +50,13 @@ export class GameOn extends React.Component<Props, State> {
 
   renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
     return moves.map((move) => {
-      if(player.player === Player.ONE) {
-        return this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!)
-      } else {
-        return this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!)
-      }
+      return player.player === Player.ONE
+        ? this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!, Player.ONE)
+        : this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!, Player.TWO)
     })
   }
 
-  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero) => {
+  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero, player: Player) => {
     return (
       <Popup wide
              trigger={
@@ -65,12 +67,12 @@ export class GameOn extends React.Component<Props, State> {
             <Grid.Column>
               <Button color='blue'
                       content={topHero.name}
-                      onClick={() => this.sendBattleMessage(move, attackingHero, topHero)} fluid />
+                      onClick={() => this.attackEnemy(move, attackingHero, topHero, player)} fluid />
             </Grid.Column>
             <Grid.Column>
               <Button color='blue'
                       content={bottomHero.name}
-                      onClick={() => this.sendBattleMessage(move, attackingHero, bottomHero)} fluid />
+                      onClick={() => this.attackEnemy(move, attackingHero, bottomHero, player)} fluid />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -78,13 +80,43 @@ export class GameOn extends React.Component<Props, State> {
     )
   }
 
+  attackEnemy = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, player: Player) => {
+    if(move.moveTypes.includes(MoveType.DAMAGE)) {
+      const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
+      console.log('damagedHero', damagedHero)
+      this.saveAttackedState(damagedHero, player)
+    }
+
+    this.sendBattleMessage(move, attackingHero, attackedHero)
+  }
+
+  saveAttackedState = (damagedHero: Hero, player: Player) => {
+    if(player === Player.ONE){
+      this.updatedPlayerTwoHealth(damagedHero)
+    // } else {
+    //   this.updatedPlayerOneHealth(damagedHero)
+    }
+  }
+
+  updatedPlayerTwoHealth = (damagedHero: Hero) => {
+    if(damagedHero.name === this.props.playerTwo.activeHeroes.top?.name) {
+      const playerTwo = {...this.props.playerTwo}
+      playerTwo.activeHeroes.top = damagedHero;
+      this.props.handleChange({playerTwo})
+    } else {
+      const playerOne = {...this.props.playerOne}
+      playerOne.activeHeroes.top = damagedHero;
+      this.props.handleChange({playerOne})
+    }
+  }
+
   sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedToHero: Hero) => {
     const newMessage = <Message content={`${attackingHero.name} attacked ${attackedToHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
     let battleMessages = this.state.battleMessages.concat(newMessage)
 
     if(battleMessages.length > 9) {
-      const toFilter = _.head(battleMessages)
-      battleMessages = battleMessages.filter(message => message !== toFilter)
+      const messageToRemove = _.head(battleMessages)
+      battleMessages = battleMessages.filter(message => message !== messageToRemove)
     }
 
     this.setState({battleMessages})

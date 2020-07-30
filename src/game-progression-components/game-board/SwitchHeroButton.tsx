@@ -1,10 +1,12 @@
 import React from 'react'
 import {Button, Icon, Modal} from "semantic-ui-react"
 import {GamePlayState, PlayerContent} from "../PlayDotaDuos"
-import {Hero, HeroImageUrl, ImageSize} from "../../dota-data/heroes"
+import {HeroImageUrl} from "../../dota-data/heroes"
 import {RecursivePick} from "../../types/RecursivePick"
 import {BattlePosition, Player} from "../GameOn"
 import _ from "lodash"
+import {Hero} from "../../types/Hero"
+import {ImageSize} from "../../enums/ImageSize"
 
 type Props = {
   player: PlayerContent
@@ -33,7 +35,6 @@ export class SwitchHeroButton extends React.Component<Props, State> {
   }
 
   onSwapHero = (hero: Hero) => {
-
     if(this.props.battlePosition === BattlePosition.BOTTOM) {
       const player = {...this.props.player}
       player.activeHeroes.bottom = hero;
@@ -44,8 +45,6 @@ export class SwitchHeroButton extends React.Component<Props, State> {
       }
     }
   }
-
-
 
   render() {
 

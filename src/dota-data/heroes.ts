@@ -1,22 +1,6 @@
-import {HeroMove} from "./moves";
 import {AbbadonMoves, AlchemistMoves, AxeMoves, BeastMasterMoves} from "./moves";
-
-
-export enum ImageSize {
-  SMALL = '_sb.png',
-  MEDIUM = '_lg.png',
-  FULL = '_full.png',
-  VERT = '_vert.jpg'
-}
-
-export type Hero = {
-  id: number,
-  name: string,
-  health?: number,
-  armour?: number,
-  healthRegen?: number,
-  moves?: HeroMove[]
-}
+import {Hero} from "../types/Hero"
+import {ImageSize} from "../enums/ImageSize"
 
 export const HeroImageUrl = (heroName: string , size: ImageSize) => {
   return `http://cdn.dota2.com/apps/dota2/images/heroes/${heroName.toLowerCase()}${size}`

@@ -1,7 +1,9 @@
 import React from 'react'
 import {Button, Grid, Modal, Segment} from "semantic-ui-react"
-import {Hero, HeroImageUrl, ImageSize} from "../dota-data/heroes"
+import {HeroImageUrl} from "../dota-data/heroes"
 import {HeroMovesInfo} from "./HeroMovesInfo"
+import {ImageSize} from "../enums/ImageSize"
+import {Hero} from "../types/Hero"
 
 type Props = {
   hero: Hero

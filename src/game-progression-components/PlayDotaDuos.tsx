@@ -1,11 +1,13 @@
 import React from 'react'
 import {Button} from "semantic-ui-react"
-import {Hero, Heroes, HeroImageUrl, ImageSize} from "../dota-data/heroes"
+import {HeroImageUrl} from "../dota-data/heroes"
 import '../styling/play-dota-duos.css'
 import {GameOn, Player} from "./GameOn"
 import {PreGame} from "./PreGame"
 import {RecursivePick} from "../types/RecursivePick"
 import {deepStateMerge} from "../MergeUtils"
+import {Hero} from "../types/Hero"
+import {ImageSize} from "../enums/ImageSize"
 
 export type ActiveHeroes = {
   top: Hero | null
