@@ -98,27 +98,19 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   updatedPlayerOneHealth = (damagedHero: Hero) => {
-    if(damagedHero.name === this.props.playerOne.activeHeroes.top?.name) {
-      const playerOne = {...this.props.playerOne}
-      playerOne.activeHeroes.top = damagedHero;
+    const playerOne = damagedHero.name === this.props.playerOne.activeHeroes.top?.name
+      ? MoveDamageService.updatePlayerOneTop(this.props.playerOne, damagedHero)
+      : MoveDamageService.updatePlayerOneBottom(this.props.playerOne, damagedHero)
+
       this.props.handleChange({playerOne})
-    } else {
-      const playerOne = {...this.props.playerOne}
-      playerOne.activeHeroes.bottom = damagedHero;
-      this.props.handleChange({playerOne})
-    }
   }
 
   updatedPlayerTwoHealth = (damagedHero: Hero) => {
-    if(damagedHero.name === this.props.playerTwo.activeHeroes.top?.name) {
-      const playerTwo = {...this.props.playerTwo}
-      playerTwo.activeHeroes.top = damagedHero;
-      this.props.handleChange({playerTwo})
-    } else {
-      const playerTwo = {...this.props.playerTwo}
-      playerTwo.activeHeroes.bottom = damagedHero;
-      this.props.handleChange({playerTwo})
-    }
+    const playerTwo = damagedHero.name === this.props.playerTwo.activeHeroes.top?.name
+      ? MoveDamageService.updatePlayerTwoTop(this.props.playerTwo, damagedHero)
+      : MoveDamageService.updatePlayerTwoBottom(this.props.playerTwo, damagedHero)
+
+    this.props.handleChange({playerTwo})
   }
 
   sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedToHero: Hero) => {
@@ -142,7 +134,8 @@ export class GameOn extends React.Component<Props, State> {
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
-
+    console.log('playerOne', playerOne)
+    console.log('playerTwo', playerTwo)
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&

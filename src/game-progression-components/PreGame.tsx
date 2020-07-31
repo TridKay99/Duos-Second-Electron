@@ -1,8 +1,9 @@
 import React from 'react'
 import {Button, Grid, Header} from "semantic-ui-react"
-import {Hero, Heroes} from "../dota-data/heroes"
+import {Heroes} from "../dota-data/heroes"
 import {GamePlayState, GameProgression, PlayerContent} from "./PlayDotaDuos"
 import {RecursivePick} from "../types/RecursivePick"
+import {Hero} from "../types/Hero"
 
 type Props = {
   gameProgression: GameProgression
@@ -22,7 +23,6 @@ export class PreGame extends React.Component<Props> {
   render() {
     const {playerOne, playerTwo} = this.props
     const playerToPick = playerOne.heroes.length < 5 ? 'PLAYER 1' : 'PLAYER 2'
-
     return (
       <Grid>
         <Grid.Row columns={3}>
