@@ -1,6 +1,6 @@
 import React from 'react'
 import {GamePlayState, PlayerContent} from "./PlayDotaDuos"
-import {Button, Grid, Message, Popup, Segment} from "semantic-ui-react"
+import {Button, Grid, Message, Modal, Popup, Segment} from "semantic-ui-react"
 import {HeroImageUrl} from "../dota-data/heroes"
 import '../styling/game-on.css'
 import _ from "lodash"
@@ -39,13 +39,6 @@ export class GameOn extends React.Component<Props, State> {
     battleMessages: [],
     showSwapDeadHeroModal: false
   }
-
-  // componentDidUpdate = () => {
-  //   if(this.props.playerOne.activeHeroes.top?.fainted === true) {
-  //     this.setState({showSwapDeadHeroModal: true})
-  //     this.swapPlayerOneDeadTopHero()
-  //   }
-  // }
 
   createPlayerTeamPictures = (heroes: Hero[]) => {
     return heroes.map((hero, index) => {

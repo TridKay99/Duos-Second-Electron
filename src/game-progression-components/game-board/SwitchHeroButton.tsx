@@ -28,7 +28,7 @@ export class SwitchHeroButton extends React.Component<Props, State> {
 
   renderHeroButtonsForSwitch = (hero: Hero) => {
     return <Button className={'hero_button_ingame'}
-                   disabled={_.isEqual(hero, this.props.player.activeHeroes.top) || _.isEqual(hero, this.props.player.activeHeroes.bottom)}
+                   disabled={_.isEqual(hero, this.props.player.activeHeroes.top) || _.isEqual(hero, this.props.player.activeHeroes.bottom) || hero.fainted}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
                    onClick={() => this.onSwapHero(hero)}
     />
