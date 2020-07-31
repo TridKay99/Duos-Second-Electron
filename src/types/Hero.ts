@@ -6,5 +6,6 @@ export type Hero = {
   health: number,
   armour: number,
   healthRegen: number,
-  moves: HeroMove[]
+  moves: HeroMove[],
+  fainted: boolean
 }

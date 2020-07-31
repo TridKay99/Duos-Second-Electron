@@ -30,13 +30,22 @@ type Props = {
 
 type State = {
   battleMessages: JSX.Element[]
+  showSwapDeadHeroModal: boolean
 }
 
 export class GameOn extends React.Component<Props, State> {
 
   state: State = {
-    battleMessages: []
+    battleMessages: [],
+    showSwapDeadHeroModal: false
   }
+
+  // componentDidUpdate = () => {
+  //   if(this.props.playerOne.activeHeroes.top?.fainted === true) {
+  //     this.setState({showSwapDeadHeroModal: true})
+  //     this.swapPlayerOneDeadTopHero()
+  //   }
+  // }
 
   createPlayerTeamPictures = (heroes: Hero[]) => {
     return heroes.map((hero, index) => {
@@ -112,13 +121,13 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedHero: Hero) => {
-    const newMessage = attackedHero.health <= 0
-      ? <Message error content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage. ${attackedHero.name} is fucking dead!`} size={'small'}/>
-      : <Message content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
+    const newMessage = attackedHero.health > 0
+      ? <Message content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
+      : <Message error content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage. ${attackedHero.name} is fucking dead!`} size={'small'}/>
 
     let battleMessages = this.state.battleMessages.concat(newMessage)
 
-    if(battleMessages.length > 9) {
+    if(battleMessages.length > 7) {
       const messageToRemove = _.head(battleMessages)
       battleMessages = battleMessages.filter(message => message !== messageToRemove)
     }
@@ -135,6 +144,7 @@ export class GameOn extends React.Component<Props, State> {
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
+
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&
@@ -190,8 +200,6 @@ export class GameOn extends React.Component<Props, State> {
                       <p>Armour:{playerOneBottomHero.armour}</p>
                     </div>
                   </div>
-                  <br/>
-                  <br/>
                 </Grid.Column>
                 <Grid.Column>
                   {/*MESSAGE AREA*/}

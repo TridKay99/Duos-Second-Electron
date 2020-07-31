@@ -10,10 +10,6 @@ export const MoveDamageService = {
 
     newHealth = attackedHero.health - move.damage
 
-    if(newHealth < 0 ) {
-      newHealth = 0
-    }
-
     attackedHero.health = newHealth
     return updatedHero
   },
@@ -25,6 +21,8 @@ export const MoveDamageService = {
     const index = updatedPlayerOne.heroes.findIndex(hero => hero.name === damagedHero.name)
     updatedPlayerOne.heroes[index] = damagedHero
 
+    updatedPlayerOne.heroes[index].fainted = MoveDamageService.checkIfFainted(updatedPlayerOne.heroes[index].health)
+
     return updatedPlayerOne
   },
 
@@ -34,6 +32,8 @@ export const MoveDamageService = {
 
     const index = updatedPlayerOne.heroes.findIndex(hero => hero.name === damagedHero.name)
     updatedPlayerOne.heroes[index] = damagedHero
+
+    updatedPlayerOne.heroes[index].fainted = MoveDamageService.checkIfFainted(updatedPlayerOne.heroes[index].health)
 
     return updatedPlayerOne
   },
@@ -45,6 +45,8 @@ export const MoveDamageService = {
     const index = updatedPlayerTwo.heroes.findIndex(hero => hero.name === damagedHero.name)
     updatedPlayerTwo.heroes[index] = damagedHero
 
+    updatedPlayerTwo.heroes[index].fainted = MoveDamageService.checkIfFainted(updatedPlayerTwo.heroes[index].health)
+
     return updatedPlayerTwo
   },
 
@@ -55,6 +57,12 @@ export const MoveDamageService = {
     const index = updatedPlayerTwo.heroes.findIndex(hero => hero.name === damagedHero.name)
     updatedPlayerTwo.heroes[index] = damagedHero
 
+    updatedPlayerTwo.heroes[index].fainted = MoveDamageService.checkIfFainted(updatedPlayerTwo.heroes[index].health)
+
     return updatedPlayerTwo
+  },
+
+  checkIfFainted: (health: number): boolean => {
+    return health <= 0
   }
 }

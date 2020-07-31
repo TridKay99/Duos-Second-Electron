@@ -7,6 +7,7 @@ import {BattlePosition, Player} from "../GameOn"
 import _ from "lodash"
 import {Hero} from "../../types/Hero"
 import {ImageSize} from "../../enums/ImageSize"
+import '../../styling/switch-hero-button.css'
 
 type Props = {
   player: PlayerContent
@@ -26,7 +27,6 @@ export class SwitchHeroButton extends React.Component<Props, State> {
   }
 
   renderHeroButtonsForSwitch = (hero: Hero) => {
-
     return <Button className={'hero_button_ingame'}
                    disabled={_.isEqual(hero, this.props.player.activeHeroes.top) || _.isEqual(hero, this.props.player.activeHeroes.bottom)}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
@@ -64,7 +64,8 @@ export class SwitchHeroButton extends React.Component<Props, State> {
     return(
       <Modal open={this.state.isSwapHeroModalOpen} size={'small'} trigger={
         <Button color={'teal'}
-                basic
+                inverted
+                circular
                 className={'exchange_button'}
                 onClick={() => this.setState({isSwapHeroModalOpen: true})}
                 content={<Icon name={'exchange'}/>}/>
