@@ -90,11 +90,9 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   saveAttackedState = (damagedHero: Hero, player: Player) => {
-    console.log('player', player)
     if(player === Player.ONE){
       this.updatedPlayerTwoHealth(damagedHero)
     } else {
-      console.log('comes in here')
       this.updatedPlayerOneHealth(damagedHero)
     }
   }

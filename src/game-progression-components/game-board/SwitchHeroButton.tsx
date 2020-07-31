@@ -35,19 +35,32 @@ export class SwitchHeroButton extends React.Component<Props, State> {
   }
 
   onSwapHero = (hero: Hero) => {
-    if(this.props.battlePosition === BattlePosition.BOTTOM) {
-      const player = {...this.props.player}
-      player.activeHeroes.bottom = hero;
+    this.props.player.player === Player.ONE
+      ? this.swapPlayerOne(hero)
+      : this.swapPlayerTwo(hero)
+  }
 
-      if(this.props.player.player === Player.TWO) {
-        this.props.handleChange({playerTwo: player})
-        this.setState({isSwapHeroModalOpen: false})
-      }
-    }
+  swapPlayerTwo = (hero: Hero) => {
+    let player = {...this.props.player}
+    this.props.battlePosition === BattlePosition.TOP
+      ? player.activeHeroes.top = hero
+      : player.activeHeroes.bottom = hero
+
+    this.props.handleChange({playerTwo: player})
+    this.setState({isSwapHeroModalOpen: false})
+  }
+
+  swapPlayerOne = (hero: Hero) => {
+    let player = {...this.props.player}
+    this.props.battlePosition === BattlePosition.TOP
+      ? player.activeHeroes.top = hero
+      : player.activeHeroes.bottom = hero
+
+    this.props.handleChange({playerOne: player})
+    this.setState({isSwapHeroModalOpen: false})
   }
 
   render() {
-
     return(
       <Modal open={this.state.isSwapHeroModalOpen} size={'small'} trigger={
         <Button color={'teal'}
@@ -56,7 +69,13 @@ export class SwitchHeroButton extends React.Component<Props, State> {
                 onClick={() => this.setState({isSwapHeroModalOpen: true})}
                 content={<Icon name={'exchange'}/>}/>
       }>
-        <Modal.Header>Switch Hero</Modal.Header>
+        <Modal.Header>
+          Switch Hero
+          <Button icon={'close'}
+                  floated={'right'}
+                  color={'red'}
+                  onClick={() => this.setState({isSwapHeroModalOpen: false})}/>
+        </Modal.Header>
         <Modal.Content textAlign={'center'}>
           {this.props.player.heroes.map((hero) => {
             return this.renderHeroButtonsForSwitch(hero)
