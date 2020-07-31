@@ -83,18 +83,16 @@ export class GameOn extends React.Component<Props, State> {
   attackEnemy = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, player: Player) => {
     if(move.moveTypes.includes(MoveType.DAMAGE)) {
       const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
-      this.saveAttackedState(damagedHero, player)
+      this.updatePlayerHealth(damagedHero, player)
     }
 
     this.sendBattleMessage(move, attackingHero, attackedHero)
   }
 
-  saveAttackedState = (damagedHero: Hero, player: Player) => {
-    if(player === Player.ONE){
-      this.updatedPlayerTwoHealth(damagedHero)
-    } else {
-      this.updatedPlayerOneHealth(damagedHero)
-    }
+  updatePlayerHealth = (damagedHero: Hero, player: Player) => {
+    player === Player.ONE
+      ? this.updatedPlayerTwoHealth(damagedHero)
+      : this.updatedPlayerOneHealth(damagedHero)
   }
 
   updatedPlayerOneHealth = (damagedHero: Hero) => {
@@ -113,8 +111,11 @@ export class GameOn extends React.Component<Props, State> {
     this.props.handleChange({playerTwo})
   }
 
-  sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedToHero: Hero) => {
-    const newMessage = <Message content={`${attackingHero.name} attacked ${attackedToHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
+  sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedHero: Hero) => {
+    const newMessage = attackedHero.health <= 0
+      ? <Message error content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage. ${attackedHero.name} is fucking dead!`} size={'small'}/>
+      : <Message content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
+
     let battleMessages = this.state.battleMessages.concat(newMessage)
 
     if(battleMessages.length > 9) {
@@ -134,8 +135,6 @@ export class GameOn extends React.Component<Props, State> {
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
-    console.log('playerOne', playerOne)
-    console.log('playerTwo', playerTwo)
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&

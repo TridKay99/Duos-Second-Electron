@@ -6,7 +6,14 @@ export const MoveDamageService = {
 
   attackHero: (attackedHero: Hero, attackingHero: Hero, move: HeroMove) => {
     let updatedHero = attackedHero
-    const newHealth = attackedHero.health - move.damage
+    let newHealth;
+
+    newHealth = attackedHero.health - move.damage
+
+    if(newHealth < 0 ) {
+      newHealth = 0
+    }
+
     attackedHero.health = newHealth
     return updatedHero
   },

@@ -78,7 +78,7 @@ const BattleHunger: HeroMove = {
 const CounterHelix: HeroMove = {
   name: "Counter Helix",
   damage: 20,
-  moveTypes: [MoveType.BUFF],
+  moveTypes: [MoveType.DAMAGE],
   description: 'Anyone dealing damage to axe takes 20 damage'
 }
 
