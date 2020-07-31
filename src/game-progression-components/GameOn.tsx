@@ -83,7 +83,6 @@ export class GameOn extends React.Component<Props, State> {
   attackEnemy = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, player: Player) => {
     if(move.moveTypes.includes(MoveType.DAMAGE)) {
       const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
-      console.log('damagedHero', damagedHero)
       this.saveAttackedState(damagedHero, player)
     }
 
@@ -91,10 +90,24 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   saveAttackedState = (damagedHero: Hero, player: Player) => {
+    console.log('player', player)
     if(player === Player.ONE){
       this.updatedPlayerTwoHealth(damagedHero)
-    // } else {
-    //   this.updatedPlayerOneHealth(damagedHero)
+    } else {
+      console.log('comes in here')
+      this.updatedPlayerOneHealth(damagedHero)
+    }
+  }
+
+  updatedPlayerOneHealth = (damagedHero: Hero) => {
+    if(damagedHero.name === this.props.playerOne.activeHeroes.top?.name) {
+      const playerOne = {...this.props.playerOne}
+      playerOne.activeHeroes.top = damagedHero;
+      this.props.handleChange({playerOne})
+    } else {
+      const playerOne = {...this.props.playerOne}
+      playerOne.activeHeroes.bottom = damagedHero;
+      this.props.handleChange({playerOne})
     }
   }
 
@@ -104,9 +117,9 @@ export class GameOn extends React.Component<Props, State> {
       playerTwo.activeHeroes.top = damagedHero;
       this.props.handleChange({playerTwo})
     } else {
-      const playerOne = {...this.props.playerOne}
-      playerOne.activeHeroes.top = damagedHero;
-      this.props.handleChange({playerOne})
+      const playerTwo = {...this.props.playerTwo}
+      playerTwo.activeHeroes.bottom = damagedHero;
+      this.props.handleChange({playerTwo})
     }
   }
 
@@ -199,7 +212,7 @@ export class GameOn extends React.Component<Props, State> {
                 <Grid.Column>
                   <div className={'top_right_moves_and_buttons'}>
                     <Button.Group vertical>
-                      {this.renderMoveButtons(playerTwoTopHero.moves!, playerTwoTopHero, playerOne)}
+                      {this.renderMoveButtons(playerTwoTopHero.moves!, playerTwoTopHero, playerTwo)}
                     </Button.Group>
                     <img src={HeroImageUrl(playerTwoTopHero.name, ImageSize.MEDIUM)} alt={''}/>
                   </div>
@@ -222,7 +235,7 @@ export class GameOn extends React.Component<Props, State> {
                   <br/>
                   <div className={'bottom_right_moves_and_buttons'}>
                     <Button.Group vertical>
-                      {this.renderMoveButtons(playerTwoBottomHero.moves!, playerTwoBottomHero, playerOne)}
+                      {this.renderMoveButtons(playerTwoBottomHero.moves!, playerTwoBottomHero, playerTwo)}
                     </Button.Group>
                     <img src={HeroImageUrl(playerTwoBottomHero.name, ImageSize.MEDIUM)} alt={''}/>
                   </div>
