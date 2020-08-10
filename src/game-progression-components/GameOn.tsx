@@ -12,6 +12,7 @@ import {ImageSize} from "../enums/ImageSize"
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
 import {TurnService} from "../services/TurnService"
+import {SpeedService} from "../services/SpeedService"
 
 export enum Player {
   ONE = 'one',
@@ -36,7 +37,7 @@ export type StoredTurn = {
   turnParams: any[]
 }
 
-export type AllPlayersStoredTruns = {
+export type AllPlayersStoredTurns = {
   playerOneTop: StoredTurn,
   playerOneBottom: StoredTurn,
   playerTwoTop: StoredTurn,
@@ -53,7 +54,7 @@ type State = {
   battleMessages: JSX.Element[]
   turnNumber: number
   beginTurn: boolean
-  allTurns: AllPlayersStoredTruns
+  allTurns: AllPlayersStoredTurns
 }
 
 export class GameOn extends React.Component<Props, State> {
@@ -95,24 +96,25 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   componentDidUpdate = () => {
-    let allTurns = {...this.state.allTurns}
+    let allTurns: AllPlayersStoredTurns = {...this.state.allTurns}
 
     const p1MovesSet = allTurns.playerOneTop.turnSelected && allTurns.playerOneBottom.turnSelected
     const p2MovesSet = allTurns.playerTwoTop.turnSelected && allTurns.playerTwoBottom.turnSelected
 
     if(p1MovesSet && p2MovesSet && !this.state.beginTurn) {
-      allTurns.playerOneTop.turn(allTurns.playerOneTop.turnParams[0], allTurns.playerOneTop.turnParams[1], allTurns.playerOneTop.turnParams[2], allTurns.playerOneTop.turnParams[3])
+      const heroesInOrderOfSpeed = SpeedService.setTurnsBySpeed(allTurns)
+      heroesInOrderOfSpeed[0].turn(heroesInOrderOfSpeed[0].turnParams[0],heroesInOrderOfSpeed[0].turnParams[1], heroesInOrderOfSpeed[0].turnParams[2], heroesInOrderOfSpeed[0].turnParams[3])
 
       setTimeout(() => {
-        allTurns.playerOneBottom.turn(allTurns.playerOneBottom.turnParams[0], allTurns.playerOneBottom.turnParams[1], allTurns.playerOneBottom.turnParams[2], allTurns.playerOneBottom.turnParams[3])
+        heroesInOrderOfSpeed[1].turn(heroesInOrderOfSpeed[1].turnParams[0], heroesInOrderOfSpeed[1].turnParams[1], heroesInOrderOfSpeed[1].turnParams[2], heroesInOrderOfSpeed[1].turnParams[3])
       }, 2000)
 
       setTimeout(() => {
-        allTurns.playerTwoTop.turn(allTurns.playerTwoTop.turnParams[0], allTurns.playerTwoTop.turnParams[1], allTurns.playerTwoTop.turnParams[2], allTurns.playerTwoTop.turnParams[3])
+        heroesInOrderOfSpeed[2].turn(heroesInOrderOfSpeed[2].turnParams[0], heroesInOrderOfSpeed[2].turnParams[1], heroesInOrderOfSpeed[2].turnParams[2], heroesInOrderOfSpeed[2].turnParams[3])
       }, 4000)
 
       setTimeout(() => {
-        allTurns.playerTwoBottom.turn(allTurns.playerTwoBottom.turnParams[0], allTurns.playerTwoBottom.turnParams[1], allTurns.playerTwoBottom.turnParams[2], allTurns.playerTwoBottom.turnParams[3])
+        heroesInOrderOfSpeed[3].turn(heroesInOrderOfSpeed[3].turnParams[0], heroesInOrderOfSpeed[3].turnParams[1], heroesInOrderOfSpeed[3].turnParams[2], heroesInOrderOfSpeed[3].turnParams[3])
       }, 6000)
 
       // allTurns.playerOneTop.turn = null
