@@ -11,6 +11,7 @@ import {Hero} from "../types/Hero"
 import {ImageSize} from "../enums/ImageSize"
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
+import {TurnService} from "../services/TurnService"
 
 export enum Player {
   ONE = 'one',
@@ -19,7 +20,27 @@ export enum Player {
 
 export enum BattlePosition {
   TOP = 'top',
-  BOTTOM = 'bottom'
+  BOTTOM = 'bottom',
+  PLAYER_ONE_TOP = 'playerOneTop',
+  PLAYER_ONE_BOT = 'playerOneBot',
+  PLAYER_TWO_TOP = 'playerTwoTop',
+  PLAYER_TWO_BOT = 'playerTwoBot'
+}
+
+export type StoredTurn = {
+  position: BattlePosition,
+  hero: Hero | null,
+  turnSelected: boolean,
+  //TURN WILL BE ANYTHING FROM USING AN ATTACK MOVE -> SWITCHING HEROES
+  turn: any | null,
+  turnParams: any[]
+}
+
+export type AllPlayersStoredTruns = {
+  playerOneTop: StoredTurn,
+  playerOneBottom: StoredTurn,
+  playerTwoTop: StoredTurn,
+  playerTwoBottom: StoredTurn
 }
 
 type Props = {
@@ -30,14 +51,47 @@ type Props = {
 
 type State = {
   battleMessages: JSX.Element[]
-  showSwapDeadHeroModal: boolean
+  turnNumber: number
+  beginTurn: boolean
+  allTurns: AllPlayersStoredTruns
 }
 
 export class GameOn extends React.Component<Props, State> {
 
   state: State = {
     battleMessages: [],
-    showSwapDeadHeroModal: false
+    turnNumber: 0,
+    beginTurn: false,
+    allTurns: {
+      playerOneTop: {
+        position: BattlePosition.PLAYER_ONE_TOP,
+        hero: this.props.playerOne.activeHeroes.top,
+        turnSelected: false,
+        turn: null,
+        turnParams: []
+      },
+      playerOneBottom: {
+        position: BattlePosition.PLAYER_ONE_BOT,
+        hero: this.props.playerOne.activeHeroes.bottom,
+        turnSelected: false,
+        turn: null,
+        turnParams: []
+      },
+      playerTwoTop: {
+        position: BattlePosition.PLAYER_TWO_TOP,
+        hero: this.props.playerTwo.activeHeroes.top,
+        turnSelected: false,
+        turn: null,
+        turnParams: []
+      },
+      playerTwoBottom: {
+        position: BattlePosition.PLAYER_TWO_BOT,
+        hero: this.props.playerTwo.activeHeroes.bottom,
+        turnSelected: false,
+        turn: null,
+        turnParams: []
+      }
+    }
   }
 
   createPlayerTeamPictures = (heroes: Hero[]) => {
@@ -53,12 +107,12 @@ export class GameOn extends React.Component<Props, State> {
   renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
     return moves.map((move) => {
       return player.player === Player.ONE
-        ? this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!, Player.ONE)
-        : this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!, Player.TWO)
+        ? this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!, Player.ONE, this.props.playerOne)
+        : this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!, Player.TWO, this.props.playerTwo)
     })
   }
 
-  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero, player: Player) => {
+  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero, playerNumber: Player, playerContent: PlayerContent) => {
     return (
       <Popup wide
              trigger={
@@ -69,12 +123,16 @@ export class GameOn extends React.Component<Props, State> {
             <Grid.Column>
               <Button color='blue'
                       content={topHero.name}
-                      onClick={() => this.attackEnemy(move, attackingHero, topHero, player)} fluid />
+                      // onClick={() => this.attackEnemyNew(move, attackingHero, topHero, player)}
+                      onClick={() => this.attackEnemyNew(move, attackingHero, topHero, playerNumber, playerContent)}
+                      fluid />
             </Grid.Column>
             <Grid.Column>
               <Button color='blue'
                       content={bottomHero.name}
-                      onClick={() => this.attackEnemy(move, attackingHero, bottomHero, player)} fluid />
+                      // onClick={() => this.attackEnemy(move, attackingHero, bottomHero, player)}
+                      onClick={() => this.attackEnemyNew(move, attackingHero, bottomHero, playerNumber, playerContent)}
+                      fluid />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -82,17 +140,30 @@ export class GameOn extends React.Component<Props, State> {
     )
   }
 
-  attackEnemy = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, player: Player) => {
+  attackEnemyNew = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, playerNumber: Player, playerContent: PlayerContent) => {
     if(move.moveTypes.includes(MoveType.DAMAGE)) {
-      const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
-      this.updatePlayerHealth(damagedHero, player)
-    }
+      const turns = TurnService.basicAttack(
+        this.state.allTurns,
+        move,
+        attackingHero,
+        attackedHero,
+        playerNumber,
+        playerContent,
+        this.attackEnemy)
 
-    this.sendBattleMessage(move, attackingHero, attackedHero)
+      if(turns) {
+        this.setState({allTurns: turns}, () => console.log('COMES IN HERE', this.state.allTurns))
+      }
+    }
   }
 
-  updatePlayerHealth = (damagedHero: Hero, player: Player) => {
-    player === Player.ONE
+  attackEnemy = (move: HeroMove, attackingHero: Hero, damagedHero: Hero, player: Player) => {
+    this.updatePlayerHealth(damagedHero, player)
+    this.sendBattleMessage(move, attackingHero, damagedHero)
+  }
+
+  updatePlayerHealth = (damagedHero: Hero, playerNumber: Player) => {
+    playerNumber === Player.ONE
       ? this.updatedPlayerTwoHealth(damagedHero)
       : this.updatedPlayerOneHealth(damagedHero)
   }
@@ -129,15 +200,11 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      playerOne,
-      playerTwo,
-    } = this.props
+    const { playerOne, playerTwo } = this.props
     const playerOneTopHero = playerOne.activeHeroes.top!
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
-
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&
