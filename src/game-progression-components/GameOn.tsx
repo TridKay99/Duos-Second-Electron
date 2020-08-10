@@ -100,20 +100,37 @@ export class GameOn extends React.Component<Props, State> {
     const p1MovesSet = allTurns.playerOneTop.turnSelected && allTurns.playerOneBottom.turnSelected
     const p2MovesSet = allTurns.playerTwoTop.turnSelected && allTurns.playerTwoBottom.turnSelected
 
-    if(allTurns.playerOneTop.turn && !this.state.beginTurn) {
+    if(p1MovesSet && p2MovesSet && !this.state.beginTurn) {
       allTurns.playerOneTop.turn(allTurns.playerOneTop.turnParams[0], allTurns.playerOneTop.turnParams[1], allTurns.playerOneTop.turnParams[2], allTurns.playerOneTop.turnParams[3])
 
-      allTurns.playerOneTop.turn = null
-      allTurns.playerOneTop.turnSelected = false
-      allTurns.playerOneTop.turnParams = []
-      this.setState({beginTurn: true, allTurns})
-    }
+      setTimeout(() => {
+        allTurns.playerOneBottom.turn(allTurns.playerOneBottom.turnParams[0], allTurns.playerOneBottom.turnParams[1], allTurns.playerOneBottom.turnParams[2], allTurns.playerOneBottom.turnParams[3])
+      }, 2000)
 
-    if(p1MovesSet && p2MovesSet) {
-      allTurns.playerOneTop.turn()
-      // allTurns.playerOneBottom.turn()
-      // allTurns.playerTwoTop.turn()
-      // allTurns.playerOneBottom.turn()
+      setTimeout(() => {
+        allTurns.playerTwoTop.turn(allTurns.playerTwoTop.turnParams[0], allTurns.playerTwoTop.turnParams[1], allTurns.playerTwoTop.turnParams[2], allTurns.playerTwoTop.turnParams[3])
+      }, 4000)
+
+      setTimeout(() => {
+        allTurns.playerTwoBottom.turn(allTurns.playerTwoBottom.turnParams[0], allTurns.playerTwoBottom.turnParams[1], allTurns.playerTwoBottom.turnParams[2], allTurns.playerTwoBottom.turnParams[3])
+      }, 6000)
+
+      // allTurns.playerOneTop.turn = null
+      // allTurns.playerOneTop.turnSelected = false
+      // allTurns.playerOneTop.turnParams = []
+      //
+      // allTurns.playerOneBottom.turn = null
+      // allTurns.playerOneBottom.turnSelected = false
+      // allTurns.playerOneBottom.turnParams = []
+      //
+      // allTurns.playerTwoTop.turn = null
+      // allTurns.playerTwoTop.turnSelected = false
+      // allTurns.playerTwoTop.turnParams = []
+      //
+      // allTurns.playerTwoBottom.turn = null
+      // allTurns.playerTwoBottom.turnSelected = false
+      // allTurns.playerTwoBottom.turnParams = []
+      this.setState({beginTurn: true, allTurns})
     }
   }
 
@@ -179,29 +196,27 @@ export class GameOn extends React.Component<Props, State> {
   }
 
   attackEnemy = (move: HeroMove, attackingHero: Hero, damagedHero: Hero, player: Player) => {
-    console.log('COMES INTO HERE')
-    this.updatePlayerHealth(damagedHero, player)
+    this.updatePlayerHealth(move, damagedHero, player)
     this.sendBattleMessage(move, attackingHero, damagedHero)
   }
 
-  updatePlayerHealth = (damagedHero: Hero, playerNumber: Player) => {
+  updatePlayerHealth = (move: HeroMove, damagedHero: Hero, playerNumber: Player) => {
     playerNumber === Player.ONE
-      ? this.updatedPlayerTwoHealth(damagedHero)
-      : this.updatedPlayerOneHealth(damagedHero)
+      ? this.updatedPlayerTwoHealth(move, damagedHero)
+      : this.updatedPlayerOneHealth(move, damagedHero)
   }
 
-  updatedPlayerOneHealth = (damagedHero: Hero) => {
+  updatedPlayerOneHealth = (move: HeroMove, damagedHero: Hero) => {
     const playerOne = damagedHero.name === this.props.playerOne.activeHeroes.top?.name
-      ? MoveDamageService.updatePlayerOneTop(this.props.playerOne, damagedHero)
-      : MoveDamageService.updatePlayerOneBottom(this.props.playerOne, damagedHero)
+      ? MoveDamageService.updatePlayerOneTop(this.props.playerOne, damagedHero, move)
+      : MoveDamageService.updatePlayerOneBottom(this.props.playerOne, damagedHero, move)
       this.props.handleChange({playerOne})
   }
 
-  updatedPlayerTwoHealth = (damagedHero: Hero) => {
+  updatedPlayerTwoHealth = (move: HeroMove, damagedHero: Hero) => {
     const playerTwo = damagedHero.name === this.props.playerTwo.activeHeroes.top?.name
-      ? MoveDamageService.updatePlayerTwoTop(this.props.playerTwo, damagedHero)
-      : MoveDamageService.updatePlayerTwoBottom(this.props.playerTwo, damagedHero)
-
+      ? MoveDamageService.updatePlayerTwoTop(this.props.playerTwo, damagedHero, move)
+      : MoveDamageService.updatePlayerTwoBottom(this.props.playerTwo, damagedHero, move)
     this.props.handleChange({playerTwo})
   }
 

@@ -4,7 +4,7 @@ import {PlayerContent} from "../game-progression-components/PlayDotaDuos"
 
 export const MoveDamageService = {
 
-  attackHero: (attackedHero: Hero, attackingHero: Hero, move: HeroMove) => {
+  attackHero: (attackedHero: Hero, move: HeroMove) => {
     let updatedHero = attackedHero
     let newHealth;
 
@@ -14,8 +14,10 @@ export const MoveDamageService = {
     return updatedHero
   },
 
-  updatePlayerOneTop: (playerOne: PlayerContent, damagedHero: Hero) => {
+  updatePlayerOneTop: (playerOne: PlayerContent, attackedHero: Hero, move: HeroMove) => {
     const updatedPlayerOne = {...playerOne}
+    let damagedHero = MoveDamageService.attackHero(attackedHero, move)
+
     updatedPlayerOne.activeHeroes.top = damagedHero;
 
     const index = updatedPlayerOne.heroes.findIndex(hero => hero.name === damagedHero.name)
@@ -26,8 +28,10 @@ export const MoveDamageService = {
     return updatedPlayerOne
   },
 
-  updatePlayerOneBottom: (playerOne: PlayerContent, damagedHero: Hero) => {
+  updatePlayerOneBottom: (playerOne: PlayerContent, attackedHero: Hero, move: HeroMove) => {
     const updatedPlayerOne = {...playerOne}
+    let damagedHero = MoveDamageService.attackHero(attackedHero, move)
+
     updatedPlayerOne.activeHeroes.bottom = damagedHero;
 
     const index = updatedPlayerOne.heroes.findIndex(hero => hero.name === damagedHero.name)
@@ -38,8 +42,10 @@ export const MoveDamageService = {
     return updatedPlayerOne
   },
 
-  updatePlayerTwoTop: (playerTwo: PlayerContent, damagedHero: Hero) => {
+  updatePlayerTwoTop: (playerTwo: PlayerContent, attackedHero: Hero, move: HeroMove) => {
     const updatedPlayerTwo = {...playerTwo}
+    let damagedHero = MoveDamageService.attackHero(attackedHero, move)
+
     updatedPlayerTwo.activeHeroes.top = damagedHero;
 
     const index = updatedPlayerTwo.heroes.findIndex(hero => hero.name === damagedHero.name)
@@ -50,8 +56,10 @@ export const MoveDamageService = {
     return updatedPlayerTwo
   },
 
-  updatePlayerTwoBottom: (playerTwo: PlayerContent, damagedHero: Hero) => {
+  updatePlayerTwoBottom: (playerTwo: PlayerContent, attackedHero: Hero, move: HeroMove) => {
     const updatedPlayerTwo = {...playerTwo}
+    let damagedHero = MoveDamageService.attackHero(attackedHero, move)
+
     updatedPlayerTwo.activeHeroes.bottom = damagedHero;
 
     const index = updatedPlayerTwo.heroes.findIndex(hero => hero.name === damagedHero.name)
