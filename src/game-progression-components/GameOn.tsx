@@ -94,6 +94,29 @@ export class GameOn extends React.Component<Props, State> {
     }
   }
 
+  componentDidUpdate = () => {
+    let allTurns = {...this.state.allTurns}
+
+    const p1MovesSet = allTurns.playerOneTop.turnSelected && allTurns.playerOneBottom.turnSelected
+    const p2MovesSet = allTurns.playerTwoTop.turnSelected && allTurns.playerTwoBottom.turnSelected
+
+    if(allTurns.playerOneTop.turn && !this.state.beginTurn) {
+      allTurns.playerOneTop.turn(allTurns.playerOneTop.turnParams[0], allTurns.playerOneTop.turnParams[1], allTurns.playerOneTop.turnParams[2], allTurns.playerOneTop.turnParams[3])
+
+      allTurns.playerOneTop.turn = null
+      allTurns.playerOneTop.turnSelected = false
+      allTurns.playerOneTop.turnParams = []
+      this.setState({beginTurn: true, allTurns})
+    }
+
+    if(p1MovesSet && p2MovesSet) {
+      allTurns.playerOneTop.turn()
+      // allTurns.playerOneBottom.turn()
+      // allTurns.playerTwoTop.turn()
+      // allTurns.playerOneBottom.turn()
+    }
+  }
+
   createPlayerTeamPictures = (heroes: Hero[]) => {
     return heroes.map((hero, index) => {
       return (
@@ -123,14 +146,12 @@ export class GameOn extends React.Component<Props, State> {
             <Grid.Column>
               <Button color='blue'
                       content={topHero.name}
-                      // onClick={() => this.attackEnemyNew(move, attackingHero, topHero, player)}
                       onClick={() => this.attackEnemyNew(move, attackingHero, topHero, playerNumber, playerContent)}
                       fluid />
             </Grid.Column>
             <Grid.Column>
               <Button color='blue'
                       content={bottomHero.name}
-                      // onClick={() => this.attackEnemy(move, attackingHero, bottomHero, player)}
                       onClick={() => this.attackEnemyNew(move, attackingHero, bottomHero, playerNumber, playerContent)}
                       fluid />
             </Grid.Column>
@@ -152,12 +173,13 @@ export class GameOn extends React.Component<Props, State> {
         this.attackEnemy)
 
       if(turns) {
-        this.setState({allTurns: turns}, () => console.log('COMES IN HERE', this.state.allTurns))
+        this.setState({allTurns: turns})
       }
     }
   }
 
   attackEnemy = (move: HeroMove, attackingHero: Hero, damagedHero: Hero, player: Player) => {
+    console.log('COMES INTO HERE')
     this.updatePlayerHealth(damagedHero, player)
     this.sendBattleMessage(move, attackingHero, damagedHero)
   }
@@ -172,7 +194,6 @@ export class GameOn extends React.Component<Props, State> {
     const playerOne = damagedHero.name === this.props.playerOne.activeHeroes.top?.name
       ? MoveDamageService.updatePlayerOneTop(this.props.playerOne, damagedHero)
       : MoveDamageService.updatePlayerOneBottom(this.props.playerOne, damagedHero)
-
       this.props.handleChange({playerOne})
   }
 
