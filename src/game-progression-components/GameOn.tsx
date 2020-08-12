@@ -1,6 +1,6 @@
 import React from 'react'
 import {GamePlayState, PlayerContent} from "./PlayDotaDuos"
-import {Button, Grid, Message, Modal, Popup, Segment} from "semantic-ui-react"
+import {Button, Grid, Header, Message, Popup, Segment} from "semantic-ui-react"
 import {HeroImageUrl} from "../dota-data/heroes"
 import '../styling/game-on.css'
 import _ from "lodash"
@@ -61,7 +61,7 @@ export class GameOn extends React.Component<Props, State> {
 
   state: State = {
     battleMessages: [],
-    turnNumber: 0,
+    turnNumber: 1,
     beginTurn: false,
     allTurns: {
       playerOneTop: {
@@ -250,7 +250,11 @@ export class GameOn extends React.Component<Props, State> {
             <div className={'top_of_play_board'}>
               <Grid>
                 {this.createPlayerTeamPictures(playerOne.heroes)}
-                <Grid.Column width={5}/>
+                <Grid.Column width={5}>
+                  <Header as={'h1'} textAlign={'center'} color={'teal'} className={'turnNumberHeader'}>
+                    Turn: {this.state.turnNumber}
+                  </Header>
+                </Grid.Column>
                 {this.createPlayerTeamPictures(playerTwo.heroes)}
               </Grid>
             </div>
