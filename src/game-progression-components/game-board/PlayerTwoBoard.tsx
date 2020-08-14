@@ -30,7 +30,6 @@ export class PlayerTwoBoard extends React.Component<Props, State> {
 
   playerTurnStatusIcon = () => {
     const {playerTurnStatus} = this.state
-
     if(playerTurnStatus === PlayerTurnStatus.NOT_READY) { return 'thumbs down' }
     else if(playerTurnStatus === PlayerTurnStatus.WAITING) { return 'spinner'}
     else { return 'check circle' }

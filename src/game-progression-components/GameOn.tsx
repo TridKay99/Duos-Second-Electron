@@ -11,7 +11,7 @@ import {MoveType} from "../enums/MoveType"
 import {TurnService} from "../services/TurnService"
 import {SpeedService} from "../services/SpeedService"
 import {GameOnHeader} from "./game-board/GameOnHeader"
-import {PlayerOneBoard} from "./game-board/PlayerOneBoard"
+import {PlayerOneBoard, PlayerTurnStatus} from "./game-board/PlayerOneBoard"
 import {PlayerTwoBoard} from "./game-board/PlayerTwoBoard"
 
 export enum Player {
@@ -92,7 +92,7 @@ export class GameOn extends React.Component<Props, GameState> {
         turn: null,
         turnParams: []
       }
-    }
+    },
   }
 
   componentDidUpdate = () => {
@@ -245,6 +245,7 @@ export class GameOn extends React.Component<Props, GameState> {
                 <PlayerOneBoard playerOne={playerOne}
                                 p1TOP={playerOneTopHero}
                                 p1BOT={playerOneBottomHero}
+                                allTurns={this.state.allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
                                 handleChange={this.props.handleChange}/>
                 <Grid.Column>
