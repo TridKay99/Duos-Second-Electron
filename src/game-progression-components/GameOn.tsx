@@ -1,18 +1,18 @@
 import React from 'react'
 import {GamePlayState, PlayerContent} from "./PlayDotaDuos"
-import {Button, Grid, Header, Message, Popup, Segment} from "semantic-ui-react"
-import {HeroImageUrl} from "../dota-data/heroes"
+import {Button, Grid, Message, Popup, Segment} from "semantic-ui-react"
 import '../styling/game-on.css'
 import _ from "lodash"
-import {SwitchHeroButton} from "./game-board/SwitchHeroButton"
 import {RecursivePick} from "../types/RecursivePick"
 import {MoveDamageService} from "../services/MoveDamageService"
 import {Hero} from "../types/Hero"
-import {ImageSize} from "../enums/ImageSize"
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
 import {TurnService} from "../services/TurnService"
 import {SpeedService} from "../services/SpeedService"
+import {GameOnHeader} from "./game-board/GameOnHeader"
+import {PlayerOneBoard} from "./game-board/PlayerOneBoard"
+import {PlayerTwoBoard} from "./game-board/PlayerTwoBoard"
 
 export enum Player {
   ONE = 'one',
@@ -50,16 +50,16 @@ type Props = {
   handleChange: (delta: RecursivePick<GamePlayState>) => void
 }
 
-type State = {
+type GameState = {
   battleMessages: JSX.Element[]
   turnNumber: number
   beginTurn: boolean
   allTurns: AllPlayersStoredTurns
 }
 
-export class GameOn extends React.Component<Props, State> {
+export class GameOn extends React.Component<Props, GameState> {
 
-  state: State = {
+  state: GameState = {
     battleMessages: [],
     turnNumber: 1,
     beginTurn: false,
@@ -134,16 +134,6 @@ export class GameOn extends React.Component<Props, State> {
       // allTurns.playerTwoBottom.turnParams = []
       this.setState({beginTurn: true, allTurns})
     }
-  }
-
-  createPlayerTeamPictures = (heroes: Hero[]) => {
-    return heroes.map((hero, index) => {
-      return (
-        <Grid.Column key={index}>
-          <img src={HeroImageUrl(hero.name, ImageSize.SMALL)}/>
-        </Grid.Column>
-      )
-    })
   }
 
   renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
@@ -247,114 +237,26 @@ export class GameOn extends React.Component<Props, State> {
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&
           <React.Fragment>
-            <div className={'top_of_play_board'}>
-              <Grid>
-                {this.createPlayerTeamPictures(playerOne.heroes)}
-                <Grid.Column width={5}>
-                  <Header as={'h1'} textAlign={'center'} color={'teal'} className={'turnNumberHeader'}>
-                    Turn: {this.state.turnNumber}
-                  </Header>
-                </Grid.Column>
-                {this.createPlayerTeamPictures(playerTwo.heroes)}
-              </Grid>
-            </div>
-            <br/>
+            <GameOnHeader turnNumber={this.state.turnNumber}
+                          playerOne={this.props.playerOne}
+                          playerTwo={this.props.playerTwo}/>
             <Grid columns={3} divided>
               <Grid.Row stretched>
+                <PlayerOneBoard playerOne={playerOne}
+                                p1TOP={playerOneTopHero}
+                                p1BOT={playerOneBottomHero}
+                                renderMoveButtons={this.renderMoveButtons}
+                                handleChange={this.props.handleChange}/>
                 <Grid.Column>
-                  <div className={'top_left_moves_and_buttons'}>
-                    <img src={HeroImageUrl(playerOneTopHero.name, ImageSize.MEDIUM)} alt={''}/>
-                    <Button.Group vertical>
-                      {this.renderMoveButtons(playerOneTopHero.moves!, playerOneTopHero, playerOne)}
-                    </Button.Group>
-                  </div>
-                  {/*TOP LEFT HEALTH & EXCHANGE*/}
-                  <div className={'top_left_hero_exchange_and_health_info'}>
-                    <SwitchHeroButton player={this.props.playerOne}
-                                      heroBeingSwitched={playerOneTopHero}
-                                      handleChange={this.props.handleChange}
-                                      battlePosition={BattlePosition.TOP}
-                    />
-                    <div className={'health_info'}>
-                      <p>Health:{playerOneTopHero.health}</p>
-                      <p>Health Regen:{playerOneTopHero.healthRegen}</p>
-                      <p>Armour:{playerOneTopHero.armour}</p>
-                    </div>
-                  </div>
-                  <br/>
-                  <br/>
-                  <div className={'bottom_left_moves_and_buttons'}>
-                    <img src={HeroImageUrl(playerOneBottomHero.name, ImageSize.MEDIUM)} alt={''}/>
-                    <Button.Group vertical>
-                      {this.renderMoveButtons(playerOneBottomHero.moves!, playerOneBottomHero, playerOne)}
-                    </Button.Group>
-                  </div>
-                  {/*BOTTOM LEFT HEALTH & EXCHANGE*/}
-                  <div className={'top_left_hero_exchange_and_health_info'}>
-                    <SwitchHeroButton player={this.props.playerOne}
-                                      heroBeingSwitched={playerOneBottomHero}
-                                      handleChange={this.props.handleChange}
-                                      battlePosition={BattlePosition.BOTTOM}
-                    />
-                    <div className={'health_info'}>
-                      <p>Health:{playerOneBottomHero.health}</p>
-                      <p>Health Regen:{playerOneBottomHero.healthRegen}</p>
-                      <p>Armour:{playerOneBottomHero.armour}</p>
-                    </div>
-                  </div>
-                </Grid.Column>
-                <Grid.Column>
-                  {/*MESSAGE AREA*/}
                   <Segment>
                     {this.state.battleMessages}
                   </Segment>
                 </Grid.Column>
-                <Grid.Column>
-                  <div className={'top_right_moves_and_buttons'}>
-                    <Button.Group vertical>
-                      {this.renderMoveButtons(playerTwoTopHero.moves!, playerTwoTopHero, playerTwo)}
-                    </Button.Group>
-                    <img src={HeroImageUrl(playerTwoTopHero.name, ImageSize.MEDIUM)} alt={''}/>
-                  </div>
-                  {/*TOP RIGHT HEALTH & EXCHANGE*/}
-                  <div className={'right_side_health_info_container'}>
-                    <div className={'right_hero_exchange_and_health_info'}>
-                      <div className={'health_info'}>
-                        <p>Health:        {playerTwoTopHero.health}</p>
-                        <p>Health Regen:  {playerTwoTopHero.healthRegen}</p>
-                        <p>Armour:        {playerTwoTopHero.armour}</p>
-                      </div>
-                      <SwitchHeroButton player={this.props.playerTwo}
-                                        heroBeingSwitched={playerTwoTopHero}
-                                        handleChange={this.props.handleChange}
-                                        battlePosition={BattlePosition.TOP}
-                      />
-                    </div>
-                  </div>
-                  <br/>
-                  <br/>
-                  <div className={'bottom_right_moves_and_buttons'}>
-                    <Button.Group vertical>
-                      {this.renderMoveButtons(playerTwoBottomHero.moves!, playerTwoBottomHero, playerTwo)}
-                    </Button.Group>
-                    <img src={HeroImageUrl(playerTwoBottomHero.name, ImageSize.MEDIUM)} alt={''}/>
-                  </div>
-                  {/*BOTTOM RIGHT HEALTH & EXCHANGE*/}
-                  <div className={'right_side_health_info_container'}>
-                    <div className={'right_hero_exchange_and_health_info'}>
-                      <div className={'health_info'}>
-                        <p>Health:        {playerTwoBottomHero.health}</p>
-                        <p>Health Regen:  {playerTwoBottomHero.healthRegen}</p>
-                        <p>Armour:        {playerTwoBottomHero.armour}</p>
-                      </div>
-                      <SwitchHeroButton player={this.props.playerTwo}
-                                        heroBeingSwitched={playerTwoBottomHero}
-                                        handleChange={this.props.handleChange}
-                                        battlePosition={BattlePosition.BOTTOM}
-                      />
-                    </div>
-                  </div>
-                </Grid.Column>
+                <PlayerTwoBoard playerTwo={playerTwo}
+                                P2TOP={playerTwoTopHero}
+                                p2BOT={playerTwoBottomHero}
+                                renderMoveButtons={this.renderMoveButtons}
+                                handleChange={this.props.handleChange}/>
               </Grid.Row>
             </Grid>
           </React.Fragment>

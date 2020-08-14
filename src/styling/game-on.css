@@ -32,9 +32,9 @@
 .top_left_hero_exchange_and_health_info {
   color: white;
   display:flex;
-  justify-content: space-evenly !important;
+  justify-content: space-around !important;
   align-items: center;
-  width: 70%
+  width: 100%
 }
 
 /*RIGHT SIDE*/
@@ -59,9 +59,6 @@
   width: 70%;
 }
 
-
-
-
 .health_info {
   display: flex;
   flex-direction: column;
@@ -69,4 +66,17 @@
 
 .exchange_button {
   height: 40px !important;
+}
+
+.top_left_exchange_button {
+  margin-left: 50px !important;
+  height: 40px !important;
+  /*padding-left: 5px !important;*/
+}
+
+.health_and_move_status {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  width: 60%
 }

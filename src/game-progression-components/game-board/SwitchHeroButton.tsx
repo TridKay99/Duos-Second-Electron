@@ -14,6 +14,7 @@ type Props = {
   heroBeingSwitched: Hero
   handleChange: (delta: RecursivePick<GamePlayState>) => void
   battlePosition: BattlePosition
+  className?: string
 }
 
 type State = {
@@ -66,7 +67,7 @@ export class SwitchHeroButton extends React.Component<Props, State> {
         <Button color={'teal'}
                 inverted
                 circular
-                className={'exchange_button'}
+                className={this.props.className ? this.props.className : 'exchange_button'}
                 onClick={() => this.setState({isSwapHeroModalOpen: true})}
                 content={<Icon name={'exchange'}/>}/>
       }>
