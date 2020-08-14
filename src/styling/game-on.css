@@ -32,7 +32,7 @@
 .top_left_hero_exchange_and_health_info {
   color: white;
   display:flex;
-  justify-content: space-around !important;
+  justify-content: flex-end !important;
   align-items: center;
   width: 100%
 }
@@ -48,15 +48,14 @@
 
 .right_side_health_info_container {
   display:flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .right_hero_exchange_and_health_info {
   color: white;
   display:flex;
-  justify-content: space-evenly !important;
   align-items: center;
-  width: 70%;
+  width: 100%;
 }
 
 .health_info {
@@ -68,10 +67,9 @@
   height: 40px !important;
 }
 
-.top_left_exchange_button {
-  margin-left: 50px !important;
+.p1_exchange_button {
+  /*margin-left: 50px !important;*/
   height: 40px !important;
-  /*padding-left: 5px !important;*/
 }
 
 .health_and_move_status {
@@ -79,4 +77,10 @@
   align-items: center !important;
   justify-content: space-around !important;
   width: 60%
+}
+
+.move_status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

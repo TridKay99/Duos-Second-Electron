@@ -61,7 +61,6 @@ export class PlayerOneBoard extends React.Component<Props, State> {
                             heroBeingSwitched={p1TOP}
                             handleChange={this.props.handleChange}
                             battlePosition={BattlePosition.TOP}
-                            className={'top_left_exchange_button'}
           />
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>
@@ -90,14 +89,15 @@ export class PlayerOneBoard extends React.Component<Props, State> {
                             heroBeingSwitched={p1BOT}
                             handleChange={this.props.handleChange}
                             battlePosition={BattlePosition.BOTTOM}
-                            className={'top_left_exchange_button'}
           />
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>
               <p>Turn Status</p>
               <Icon name={icon}
                     color={'green'}
-                    size={'big'}/>
+                    size={'big'}
+                    textAlign={'center'}
+              />
             </div>
             <div className={'health_info'}>
               <p>{healthIcon}Health:{p1BOT.health}</p>
