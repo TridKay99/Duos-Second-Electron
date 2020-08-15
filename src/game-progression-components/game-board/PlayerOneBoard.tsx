@@ -37,8 +37,6 @@ export class PlayerOneBoard extends React.Component<Props, State> {
     topTurnStatus: PlayerTurnStatus.NOT_READY,
     botTurnStatus: PlayerTurnStatus.NOT_READY
   }
-  // componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
-  // }
 
   componentDidUpdate = (prevProps: Readonly<Props>) => {
     const {playerOneTop, playerOneBottom} = this.props.allTurns
@@ -86,6 +84,7 @@ export class PlayerOneBoard extends React.Component<Props, State> {
     const healthIcon = <Icon name={'heartbeat'} color={"red"}/>
     const regenIcon = <Icon name={'plus square'} color={"green"}/>
     const armourIcon = <Icon name={'chess rook'} color={'blue'}/>
+
     return (
       <Grid.Column>
         <div className={'top_left_moves_and_buttons'}>

@@ -2,6 +2,7 @@ import {HeroMove} from "../types/HeroMove"
 import {Hero} from "../types/Hero"
 import {AllPlayersStoredTurns, BattlePosition, Player, StoredTurn} from "../game-progression-components/GameOn"
 import {PlayerContent} from "../game-progression-components/PlayDotaDuos"
+import _ from "lodash"
 
 
 export const TurnService = {
@@ -13,7 +14,8 @@ export const TurnService = {
                 playerContent: PlayerContent,
                 func: any) => {
 
-    let heroToMatch = Object.values(allTurns).find(it => it.hero === attackingHero)
+    let heroToMatch = Object.values(allTurns).find(it => _.isEqual(it.hero, attackingHero))
+    
     if(heroToMatch) {
       if( heroToMatch.position === BattlePosition.PLAYER_ONE_TOP){return TurnService.playerOneTopTurn(allTurns, attackingHero, attackedHero, move, func, player)}
       else if(heroToMatch.position === BattlePosition.PLAYER_ONE_BOT){return TurnService.playerOneBotTurn(allTurns, attackingHero, attackedHero, move, func, player)}
@@ -81,7 +83,7 @@ export const TurnService = {
   wipeAllTurns: (allTurns: AllPlayersStoredTurns) => {
     let turns = {...allTurns}
     turns.playerOneTop = TurnService.wipeTurn(turns.playerOneTop)
-    turns.playerOneBottom = TurnService.wipeTurn(turns.playerTwoBottom)
+    turns.playerOneBottom = TurnService.wipeTurn(turns.playerOneBottom)
     turns.playerTwoBottom = TurnService.wipeTurn(turns.playerTwoBottom)
     turns.playerTwoTop = TurnService.wipeTurn(turns.playerTwoTop)
 

@@ -11,7 +11,7 @@ import {MoveType} from "../enums/MoveType"
 import {TurnService} from "../services/TurnService"
 import {SpeedService} from "../services/SpeedService"
 import {GameOnHeader} from "./game-board/GameOnHeader"
-import {PlayerOneBoard, PlayerTurnStatus} from "./game-board/PlayerOneBoard"
+import {PlayerOneBoard} from "./game-board/PlayerOneBoard"
 import {PlayerTwoBoard} from "./game-board/PlayerTwoBoard"
 
 export enum Player {
@@ -101,7 +101,12 @@ export class GameOn extends React.Component<Props, GameState> {
     const p1MovesSet = allTurns.playerOneTop.turnSelected && allTurns.playerOneBottom.turnSelected
     const p2MovesSet = allTurns.playerTwoTop.turnSelected && allTurns.playerTwoBottom.turnSelected
 
-    if(p1MovesSet && p2MovesSet && !this.state.beginTurn) {
+    if(p1MovesSet && p2MovesSet) {
+      this.setState({ beginTurn: true })
+    }
+
+    if(this.state.beginTurn) {
+      this.setState({beginTurn: false})
       const heroesInOrderOfSpeed = SpeedService.setTurnsBySpeed(allTurns)
       heroesInOrderOfSpeed[0].turn(heroesInOrderOfSpeed[0].turnParams[0],heroesInOrderOfSpeed[0].turnParams[1], heroesInOrderOfSpeed[0].turnParams[2], heroesInOrderOfSpeed[0].turnParams[3])
 
@@ -119,7 +124,7 @@ export class GameOn extends React.Component<Props, GameState> {
       }, 6000)
 
       const allTurnsWiped = TurnService.wipeAllTurns(allTurns)
-      this.setState({beginTurn: true, allTurns: allTurnsWiped})
+      this.setState({allTurns: allTurnsWiped})
     }
   }
 
@@ -167,7 +172,6 @@ export class GameOn extends React.Component<Props, GameState> {
         playerNumber,
         playerContent,
         this.attackEnemy)
-
       if(turns) {
         this.setState({allTurns: turns})
       }
@@ -221,14 +225,13 @@ export class GameOn extends React.Component<Props, GameState> {
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
-
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&
           <React.Fragment>
-            <GameOnHeader turnNumber={this.state.turnNumber}
-                          playerOne={this.props.playerOne}
-                          playerTwo={this.props.playerTwo}/>
+            <GameOnHeader turnNumber={turnNumber}
+                          playerOne={playerOne}
+                          playerTwo={playerTwo}/>
             <Grid columns={3} divided>
               <Grid.Row stretched>
                 <PlayerOneBoard playerOne={playerOne}
