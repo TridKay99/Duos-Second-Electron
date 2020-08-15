@@ -41,15 +41,20 @@ export class PlayerOneBoard extends React.Component<Props, State> {
     const {playerOneTop, playerOneBottom} = this.props.allTurns
     const {topTurnStatus, botTurnStatus} = this.state
 
-    if(playerOneTop.turnSelected && topTurnStatus !== PlayerTurnStatus.WAITING &&  topTurnStatus !== PlayerTurnStatus.READY) {
+    const topPlayerNotReady = topTurnStatus === PlayerTurnStatus.NOT_READY
+    const botPlayerNotReady = botTurnStatus === PlayerTurnStatus.NOT_READY
+    const topPlayerWaiting = topTurnStatus === PlayerTurnStatus.WAITING
+    const botPlayerWaiting = botTurnStatus === PlayerTurnStatus.WAITING
+
+    if(playerOneTop.turnSelected && topPlayerNotReady)  {
       this.setState({topTurnStatus: PlayerTurnStatus.WAITING})
     }
 
-    if(playerOneBottom.turnSelected && botTurnStatus !== PlayerTurnStatus.WAITING && botTurnStatus !== PlayerTurnStatus.READY) {
+    if(playerOneBottom.turnSelected && botPlayerNotReady) {
       this.setState({botTurnStatus: PlayerTurnStatus.WAITING})
     }
 
-    if(this.state.topTurnStatus === PlayerTurnStatus.WAITING && this.state.botTurnStatus === PlayerTurnStatus.WAITING && (topTurnStatus !== PlayerTurnStatus.READY && botTurnStatus !== PlayerTurnStatus.READY)) {
+    if(topPlayerWaiting && botPlayerWaiting) {
       this.setState({topTurnStatus: PlayerTurnStatus.READY, botTurnStatus: PlayerTurnStatus.READY})
     }
   }
@@ -58,13 +63,13 @@ export class PlayerOneBoard extends React.Component<Props, State> {
     const {topTurnStatus, botTurnStatus} = this.state
 
     if(position === BattlePosition.TOP) {
-      if(topTurnStatus === PlayerTurnStatus.NOT_READY) { return 'thumbs down' }
-      else if(topTurnStatus === PlayerTurnStatus.WAITING) { return 'spinner'}
-      else { return 'check circle' }
+      if(topTurnStatus === PlayerTurnStatus.NOT_READY) { return <Icon name={'thumbs down'} color={'red'} size={'big'}/>}
+      else if(topTurnStatus === PlayerTurnStatus.WAITING) { return <Icon loading name={"spinner"} color={'blue'} size={'big'}/>}
+      else { return <Icon name={'check circle'} color={'green'} size={'big'}/> }
     } else {
-      if(botTurnStatus === PlayerTurnStatus.NOT_READY) { return 'thumbs down' }
-      else if(botTurnStatus === PlayerTurnStatus.WAITING) { return 'spinner'}
-      else { return 'check circle' }
+      if(botTurnStatus === PlayerTurnStatus.NOT_READY) { return <Icon name={'thumbs down'} color={'red'} size={'big'}/>}
+      else if(botTurnStatus === PlayerTurnStatus.WAITING) { return <Icon loading name={"spinner"} color={'blue'} size={'big'}/>}
+      else { return <Icon name={'check circle'} color={'green'} size={'big'}/> }
     }
   }
 
@@ -90,9 +95,7 @@ export class PlayerOneBoard extends React.Component<Props, State> {
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>
               <p>Turn Status</p>
-              <Icon name={this.playerTurnStatusIcon(BattlePosition.TOP)}
-                    color={'green'}
-                    size={'big'}/>
+              {this.playerTurnStatusIcon(BattlePosition.TOP)}
             </div>
             <div className={'health_info'}>
               <p>{healthIcon}Health:{p1TOP.health}</p>
@@ -118,11 +121,7 @@ export class PlayerOneBoard extends React.Component<Props, State> {
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>
               <p>Turn Status</p>
-              <Icon name={this.playerTurnStatusIcon(BattlePosition.BOTTOM)}
-                    color={'green'}
-                    size={'big'}
-                    textAlign={'center'}
-              />
+              {this.playerTurnStatusIcon(BattlePosition.BOTTOM)}
             </div>
             <div className={'health_info'}>
               <p>{healthIcon}Health:{p1BOT.health}</p>

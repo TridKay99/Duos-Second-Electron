@@ -256,6 +256,7 @@ export class GameOn extends React.Component<Props, GameState> {
                 <PlayerTwoBoard playerTwo={playerTwo}
                                 P2TOP={playerTwoTopHero}
                                 p2BOT={playerTwoBottomHero}
+                                allTurns={this.state.allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
                                 handleChange={this.props.handleChange}/>
               </Grid.Row>
