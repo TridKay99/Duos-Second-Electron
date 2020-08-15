@@ -123,6 +123,13 @@ export class GameOn extends React.Component<Props, GameState> {
         this.setState({turnNumber: this.state.turnNumber + 1}))
       }, 6000)
 
+      setTimeout(() => {
+        let playerOne = {...this.props.playerOne}
+        // playerOne.activeHeroes =
+        TurnService.regenHealth(playerOne.activeHeroes)
+        this.props.handleChange({playerOne: playerOne})
+      }, 8000)
+
       const allTurnsWiped = TurnService.wipeAllTurns(allTurns)
       this.setState({allTurns: allTurnsWiped})
     }
