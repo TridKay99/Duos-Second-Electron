@@ -1,12 +1,11 @@
 import {HeroMove} from "../types/HeroMove"
 import {Hero} from "../types/Hero"
-import {AllPlayersStoredTruns, BattlePosition, Player, StoredTurn} from "../game-progression-components/GameOn"
-import {MoveDamageService} from "./MoveDamageService"
+import {AllPlayersStoredTurns, BattlePosition, Player, StoredTurn} from "../game-progression-components/GameOn"
 import {PlayerContent} from "../game-progression-components/PlayDotaDuos"
 
 
 export const TurnService = {
-  basicAttack: (allTurns: AllPlayersStoredTruns,
+  basicAttack: (allTurns: AllPlayersStoredTurns,
                 move: HeroMove,
                 attackingHero: Hero,
                 attackedHero: Hero,
@@ -23,13 +22,12 @@ export const TurnService = {
     }
   },
 
-  playerOneTopTurn: (allTurns: AllPlayersStoredTruns,
+  playerOneTopTurn: (allTurns: AllPlayersStoredTurns,
                      attackingHero: Hero,
                      attackedHero: Hero,
                      move: HeroMove,
                      func: any,
                      player: Player) => {
-    // const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
     let turns = {...allTurns}
     turns.playerOneTop.turnSelected = true
     turns.playerOneTop.turn = func
@@ -38,13 +36,12 @@ export const TurnService = {
     return turns
   },
 
-  playerOneBotTurn: (allTurns: AllPlayersStoredTruns,
+  playerOneBotTurn: (allTurns: AllPlayersStoredTurns,
                      attackingHero: Hero,
                      attackedHero: Hero,
                      move: HeroMove,
                      func: any,
                      player: Player) => {
-    // const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
     let turns = {...allTurns}
     turns.playerOneBottom.turnSelected = true
     turns.playerOneBottom.turn = func
@@ -53,13 +50,12 @@ export const TurnService = {
     return turns
   },
 
-  playerTwoTopTurn: (allTurns: AllPlayersStoredTruns,
+  playerTwoTopTurn: (allTurns: AllPlayersStoredTurns,
                      attackingHero: Hero,
                      attackedHero: Hero,
                      move: HeroMove,
                      func: any,
                      player: Player) => {
-    // const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
     let turns = {...allTurns}
     turns.playerTwoTop.turnSelected = true
     turns.playerTwoTop.turn = func
@@ -68,13 +64,12 @@ export const TurnService = {
     return turns
   },
 
-  playerTwoBotTurn: (allTurns: AllPlayersStoredTruns,
+  playerTwoBotTurn: (allTurns: AllPlayersStoredTurns,
                      attackingHero: Hero,
                      attackedHero: Hero,
                      move: HeroMove,
                      func: any,
                      player: Player) => {
-    // const damagedHero = MoveDamageService.attackHero(attackedHero, attackingHero, move)
     let turns = {...allTurns}
     turns.playerTwoBottom.turnSelected = true
     turns.playerTwoBottom.turn = func
@@ -83,9 +78,20 @@ export const TurnService = {
     return turns
   },
 
+  wipeAllTurns: (allTurns: AllPlayersStoredTurns) => {
+    let turns = {...allTurns}
+    turns.playerOneTop = TurnService.wipeTurn(turns.playerOneTop)
+    turns.playerOneBottom = TurnService.wipeTurn(turns.playerTwoBottom)
+    turns.playerTwoBottom = TurnService.wipeTurn(turns.playerTwoBottom)
+    turns.playerTwoTop = TurnService.wipeTurn(turns.playerTwoTop)
+
+    return turns
+  },
+
   wipeTurn: (storedTurn: StoredTurn) => {
     let turn = {...storedTurn}
-
+    turn.turnSelected = false
+    turn.turnParams = []
     turn.turn = null
     return turn
   }

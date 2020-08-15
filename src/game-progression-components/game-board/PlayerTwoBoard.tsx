@@ -17,6 +17,7 @@ type Props = {
   allTurns: AllPlayersStoredTurns
   renderMoveButtons: (moves: HeroMove[], attackingHero: Hero, player: PlayerContent)=> JSX.Element[]
   handleChange: (delta: RecursivePick<GamePlayState>) => void
+  turnNumber: number
 }
 
 type State = {
@@ -31,7 +32,7 @@ export class PlayerTwoBoard extends React.Component<Props, State> {
     botTurnStatus: PlayerTurnStatus.NOT_READY
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = (prevProps: Readonly<Props>) => {
     const {playerTwoTop, playerTwoBottom} = this.props.allTurns
     const {topTurnStatus, botTurnStatus} = this.state
 
@@ -39,6 +40,7 @@ export class PlayerTwoBoard extends React.Component<Props, State> {
     const botPlayerNotReady = botTurnStatus === PlayerTurnStatus.NOT_READY
     const topPlayerWaiting = topTurnStatus === PlayerTurnStatus.WAITING
     const botPlayerWaiting = botTurnStatus === PlayerTurnStatus.WAITING
+    const topPlayerReady = topTurnStatus === PlayerTurnStatus.READY
 
     if(playerTwoTop.turnSelected && topPlayerNotReady)  {
       this.setState({topTurnStatus: PlayerTurnStatus.WAITING})
@@ -50,6 +52,10 @@ export class PlayerTwoBoard extends React.Component<Props, State> {
 
     if(topPlayerWaiting && botPlayerWaiting) {
       this.setState({topTurnStatus: PlayerTurnStatus.READY, botTurnStatus: PlayerTurnStatus.READY})
+    }
+
+    if(prevProps.turnNumber < this.props.turnNumber && topPlayerReady) {
+      this.setState({topTurnStatus: PlayerTurnStatus.NOT_READY, botTurnStatus: PlayerTurnStatus.NOT_READY})
     }
   }
 

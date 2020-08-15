@@ -114,25 +114,12 @@ export class GameOn extends React.Component<Props, GameState> {
       }, 4000)
 
       setTimeout(() => {
-        heroesInOrderOfSpeed[3].turn(heroesInOrderOfSpeed[3].turnParams[0], heroesInOrderOfSpeed[3].turnParams[1], heroesInOrderOfSpeed[3].turnParams[2], heroesInOrderOfSpeed[3].turnParams[3])
+        heroesInOrderOfSpeed[3].turn(heroesInOrderOfSpeed[3].turnParams[0], heroesInOrderOfSpeed[3].turnParams[1], heroesInOrderOfSpeed[3].turnParams[2], heroesInOrderOfSpeed[3].turnParams[3],
+        this.setState({turnNumber: this.state.turnNumber + 1}))
       }, 6000)
 
-      // allTurns.playerOneTop.turn = null
-      // allTurns.playerOneTop.turnSelected = false
-      // allTurns.playerOneTop.turnParams = []
-      //
-      // allTurns.playerOneBottom.turn = null
-      // allTurns.playerOneBottom.turnSelected = false
-      // allTurns.playerOneBottom.turnParams = []
-      //
-      // allTurns.playerTwoTop.turn = null
-      // allTurns.playerTwoTop.turnSelected = false
-      // allTurns.playerTwoTop.turnParams = []
-      //
-      // allTurns.playerTwoBottom.turn = null
-      // allTurns.playerTwoBottom.turnSelected = false
-      // allTurns.playerTwoBottom.turnParams = []
-      this.setState({beginTurn: true, allTurns})
+      const allTurnsWiped = TurnService.wipeAllTurns(allTurns)
+      this.setState({beginTurn: true, allTurns: allTurnsWiped})
     }
   }
 
@@ -229,10 +216,12 @@ export class GameOn extends React.Component<Props, GameState> {
 
   render() {
     const { playerOne, playerTwo } = this.props
+    const { turnNumber, allTurns } = this.state
     const playerOneTopHero = playerOne.activeHeroes.top!
     const playerOneBottomHero = playerOne.activeHeroes.bottom!
     const playerTwoTopHero = playerTwo.activeHeroes.top!
     const playerTwoBottomHero = playerTwo.activeHeroes.bottom!
+
     return (
       <React.Fragment>
         {playerOne.activeHeroes.top && playerOne.activeHeroes.bottom && playerTwo.activeHeroes.top && playerTwo.activeHeroes.bottom &&
@@ -245,9 +234,11 @@ export class GameOn extends React.Component<Props, GameState> {
                 <PlayerOneBoard playerOne={playerOne}
                                 p1TOP={playerOneTopHero}
                                 p1BOT={playerOneBottomHero}
-                                allTurns={this.state.allTurns}
+                                allTurns={allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
-                                handleChange={this.props.handleChange}/>
+                                handleChange={this.props.handleChange}
+                                turnNumber={turnNumber}
+                />
                 <Grid.Column>
                   <Segment>
                     {this.state.battleMessages}
@@ -256,9 +247,11 @@ export class GameOn extends React.Component<Props, GameState> {
                 <PlayerTwoBoard playerTwo={playerTwo}
                                 P2TOP={playerTwoTopHero}
                                 p2BOT={playerTwoBottomHero}
-                                allTurns={this.state.allTurns}
+                                allTurns={allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
-                                handleChange={this.props.handleChange}/>
+                                handleChange={this.props.handleChange}
+                                turnNumber={turnNumber}
+                />
               </Grid.Row>
             </Grid>
           </React.Fragment>
