@@ -6,5 +6,6 @@ export enum MoveType {
   SHIELD = 'shield',
   TAUNT = 'taunt',
   BUFF = 'buff',
-  ULTIMATE = 'ultimate'
+  ULTIMATE = 'ultimate',
+  DAMAGE_AMP = 'damage_amp'
 }

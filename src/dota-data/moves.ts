@@ -1,5 +1,6 @@
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
+import {Hero} from "../types/Hero"
 
 //ABBADON
 const MistCoil: HeroMove = {
@@ -115,11 +116,74 @@ const PrimalRoar: HeroMove = {
   name: "Primal Roar",
   damage: 20,
   moveTypes: [MoveType.DAMAGE, MoveType.STUN, MoveType.ULTIMATE],
-  description: 'Deals 20 damage and slows the enemy for 2 turns'
+  description: 'Deals 20 damage and stuns the enemy for 2 turns'
 }
+
+//BREWMASTER
+const ThunderClap: HeroMove = {
+  name: "Thunder Clap",
+  damage: 40,
+  moveTypes: [MoveType.DAMAGE, MoveType.SLOW],
+  description: 'Deals 40 damage and slow the enemy for 2 turns'
+}
+
+const CinderBrew: HeroMove = {
+  name: "Cinder Brew",
+  damage: 0,
+  moveTypes: [MoveType.TAUNT, MoveType.DAMAGE_AMP],
+  description: 'Amps damage '
+}
+
+const DrunkenBrawler: HeroMove = {
+  name: 'Drunken Brawler',
+  damage: 0,
+  moveTypes: [MoveType.BUFF],
+  description: 'raises speed and crit for 3 turns'
+}
+
+const PrimalSpirit: HeroMove = {
+  name: 'Primal Spirit',
+  damage: 80,
+  moveTypes: [MoveType.DAMAGE, MoveType.ULTIMATE, MoveType.STUN],
+  description: 'Does 3 attacks that damages, stuns and SOMETHING ELSE'
+}
+
+//BRISTLEBACK
+
+const ViscousNasalGoo = {
+  name: 'Viscous Nasal Goo',
+  damage: 0,
+  moveTypes: [MoveType.SLOW, MoveType.DAMAGE_AMP],
+  description: 'Slows the target and makes them take more damage'
+}
+
+const QuillSpray = {
+  name: 'Quill Spray',
+  damage: 20,
+  moveTypes: [MoveType.DAMAGE],
+  description: 'If used last turn then it does an extra 20 damage'
+}
+
+const Bristleback = {
+  name: 'Bristleback',
+  damage: 0,
+  moveTypes: [MoveType.TAUNT, MoveType.BUFF],
+  description: 'Bristle taunts opponent and gains 10 armour'
+}
+
+const Warpath = {
+  name: 'Warpath',
+  damage: 0,
+  moveTypes: [MoveType.BUFF],
+  description: 'Bristle gets faster and quill spray deals more damage for 3 turns'
+}
+
+
 
 
 export const AbbadonMoves = {MistCoil, AphoticSheild, CurseOfAvernus, BorrowedTime}
 export const AlchemistMoves = {AcidSpray, UnstableConcoction, GreevilsGreed, ChemicalRage}
 export const AxeMoves = {BeserkersCall, BattleHunger, CounterHelix, CullingBlade}
 export const BeastMasterMoves = {WildAxes, CallOfTheWild, InnerBeast, PrimalRoar}
+export const BrewMasterMoves = {ThunderClap, CinderBrew, DrunkenBrawler, PrimalSpirit}
+export const BristlebackMoves = {ViscousNasalGoo, QuillSpray, Bristleback, Warpath}
