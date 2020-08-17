@@ -15,7 +15,8 @@ export const TurnService = {
                 func: any) => {
 
     let heroToMatch = Object.values(allTurns).find(it => _.isEqual(it.hero, attackingHero))
-
+    console.log('allTurns', allTurns)
+    console.log('attackingHero', attackingHero)
     if(heroToMatch) {
       if( heroToMatch.position === BattlePosition.PLAYER_ONE_TOP){return TurnService.playerOneTopTurn(allTurns, attackingHero, attackedHero, move, func, player)}
       else if(heroToMatch.position === BattlePosition.PLAYER_ONE_BOT){return TurnService.playerOneBotTurn(allTurns, attackingHero, attackedHero, move, func, player)}

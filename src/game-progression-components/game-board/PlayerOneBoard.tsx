@@ -3,7 +3,7 @@ import {HeroImageUrl} from "../../dota-data/heroes"
 import {ImageSize} from "../../enums/ImageSize"
 import {Button, Grid, Icon} from "semantic-ui-react"
 import {SwitchHeroButton} from "./SwitchHeroButton"
-import {AllPlayersStoredTurns, BattlePosition} from "../GameOn"
+import {AllPlayersStoredTurns, BattlePosition, GameOnState} from "../GameOn"
 import {GamePlayState, PlayerContent} from "../PlayDotaDuos"
 import {Hero} from "../../types/Hero"
 import {HeroMove} from "../../types/HeroMove"
@@ -23,6 +23,7 @@ type Props = {
   allTurns: AllPlayersStoredTurns
   renderMoveButtons: (moves: HeroMove[], attackingHero: Hero, player: PlayerContent)=> JSX.Element[]
   handleChange: (delta: RecursivePick<GamePlayState>) => void
+  handleGameStateChange: (delta: RecursivePick<GameOnState>) => void
   turnNumber: number
 }
 
@@ -97,7 +98,9 @@ export class PlayerOneBoard extends React.Component<Props, State> {
           <SwitchHeroButton player={this.props.playerOne}
                             heroBeingSwitched={p1TOP}
                             handleChange={this.props.handleChange}
+                            handleGameStateChange={this.props.handleGameStateChange}
                             battlePosition={BattlePosition.TOP}
+                            allTurns={this.props.allTurns}
           />
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>
@@ -123,7 +126,9 @@ export class PlayerOneBoard extends React.Component<Props, State> {
           <SwitchHeroButton player={this.props.playerOne}
                             heroBeingSwitched={p1BOT}
                             handleChange={this.props.handleChange}
+                            handleGameStateChange={this.props.handleGameStateChange}
                             battlePosition={BattlePosition.BOTTOM}
+                            allTurns={this.props.allTurns}
           />
           <div className={'health_and_move_status'}>
             <div className={'move_status'}>

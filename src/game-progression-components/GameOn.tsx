@@ -13,6 +13,7 @@ import {SpeedService} from "../services/SpeedService"
 import {GameOnHeader} from "./game-board/GameOnHeader"
 import {PlayerOneBoard} from "./game-board/PlayerOneBoard"
 import {PlayerTwoBoard} from "./game-board/PlayerTwoBoard"
+import {deepStateMerge} from "../MergeUtils"
 
 export enum Player {
   ONE = 'one',
@@ -50,16 +51,16 @@ type Props = {
   handleChange: (delta: RecursivePick<GamePlayState>) => void
 }
 
-type GameState = {
+export type GameOnState = {
   battleMessages: JSX.Element[]
   turnNumber: number
   beginTurn: boolean
   allTurns: AllPlayersStoredTurns
 }
 
-export class GameOn extends React.Component<Props, GameState> {
+export class GameOn extends React.Component<Props, GameOnState> {
 
-  state: GameState = {
+  state: GameOnState = {
     battleMessages: [],
     turnNumber: 1,
     beginTurn: false,
@@ -125,7 +126,6 @@ export class GameOn extends React.Component<Props, GameState> {
 
       setTimeout(() => {
         let playerOne = {...this.props.playerOne}
-        // playerOne.activeHeroes =
         TurnService.regenHealth(playerOne.activeHeroes)
         this.props.handleChange({playerOne: playerOne})
       }, 8000)
@@ -133,6 +133,14 @@ export class GameOn extends React.Component<Props, GameState> {
       const allTurnsWiped = TurnService.wipeAllTurns(allTurns)
       this.setState({allTurns: allTurnsWiped})
     }
+  }
+
+  handleGameStateChange = (delta: RecursivePick<GameOnState>) => {
+    this.setState(deepStateMerge(delta), this.saveState)
+  }
+
+  saveState = () => {
+    this.setState(this.state)
   }
 
   renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
@@ -247,6 +255,7 @@ export class GameOn extends React.Component<Props, GameState> {
                                 allTurns={allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
                                 handleChange={this.props.handleChange}
+                                handleGameStateChange={this.handleGameStateChange}
                                 turnNumber={turnNumber}
                 />
                 <Grid.Column>
@@ -260,6 +269,7 @@ export class GameOn extends React.Component<Props, GameState> {
                                 allTurns={allTurns}
                                 renderMoveButtons={this.renderMoveButtons}
                                 handleChange={this.props.handleChange}
+                                handleGameStateChange={this.handleGameStateChange}
                                 turnNumber={turnNumber}
                 />
               </Grid.Row>

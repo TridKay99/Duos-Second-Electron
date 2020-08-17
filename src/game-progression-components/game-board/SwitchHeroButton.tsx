@@ -3,7 +3,7 @@ import {Button, Icon, Modal} from "semantic-ui-react"
 import {GamePlayState, PlayerContent} from "../PlayDotaDuos"
 import {HeroImageUrl} from "../../dota-data/heroes"
 import {RecursivePick} from "../../types/RecursivePick"
-import {BattlePosition, Player} from "../GameOn"
+import {AllPlayersStoredTurns, BattlePosition, GameOnState, Player} from "../GameOn"
 import _ from "lodash"
 import {Hero} from "../../types/Hero"
 import {ImageSize} from "../../enums/ImageSize"
@@ -13,7 +13,9 @@ type Props = {
   player: PlayerContent
   heroBeingSwitched: Hero
   handleChange: (delta: RecursivePick<GamePlayState>) => void
+  handleGameStateChange: (delta: RecursivePick<GameOnState>) => void
   battlePosition: BattlePosition
+  allTurns: AllPlayersStoredTurns
 }
 
 type State = {
@@ -41,10 +43,13 @@ export class SwitchHeroButton extends React.Component<Props, State> {
   }
 
   swapPlayerTwo = (hero: Hero) => {
+    console.log('hero', hero)
     let player = {...this.props.player}
     this.props.battlePosition === BattlePosition.TOP
       ? player.activeHeroes.top = hero
       : player.activeHeroes.bottom = hero
+
+    this.updateP2TurnsForSwap(hero)
 
     this.props.handleChange({playerTwo: player})
     this.setState({isSwapHeroModalOpen: false})
@@ -56,8 +61,30 @@ export class SwitchHeroButton extends React.Component<Props, State> {
       ? player.activeHeroes.top = hero
       : player.activeHeroes.bottom = hero
 
+    this.updateP1TurnsForSwap(hero)
+
     this.props.handleChange({playerOne: player})
     this.setState({isSwapHeroModalOpen: false})
+  }
+
+  updateP1TurnsForSwap = (hero: Hero) => {
+    let allTurns = {...this.props.allTurns}
+
+    this.props.battlePosition === BattlePosition.TOP
+      ? allTurns.playerOneTop.hero = hero
+      : allTurns.playerOneBottom.hero = hero
+
+    this.props.handleGameStateChange({allTurns})
+  }
+
+  updateP2TurnsForSwap = (hero: Hero) => {
+    let allTurns = {...this.props.allTurns}
+
+    this.props.battlePosition === BattlePosition.TOP
+      ? allTurns.playerTwoTop.hero = hero
+      : allTurns.playerTwoBottom.hero = hero
+
+    this.props.handleGameStateChange({allTurns})
   }
 
   render() {
