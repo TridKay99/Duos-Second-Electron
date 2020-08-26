@@ -1,4 +1,12 @@
-import {AbbadonMoves, AlchemistMoves, AxeMoves, BeastMasterMoves, BrewMasterMoves, BristlebackMoves} from "./moves"
+import {
+  AbbadonMoves,
+  AlchemistMoves,
+  AxeMoves,
+  BeastMasterMoves,
+  BrewMasterMoves,
+  BristlebackMoves,
+  CentaurMoves, ChaosKnightMoves, DragonKnightMoves, EarthSpiritMoves
+} from "./moves"
 import {Hero} from "../types/Hero"
 import {ImageSize} from "../enums/ImageSize"
 
@@ -58,24 +66,24 @@ export const Heroes: Hero[] = [
     moves: [BristlebackMoves.ViscousNasalGoo, BristlebackMoves.Bristleback, BristlebackMoves.QuillSpray, BristlebackMoves.Warpath],
     fainted: false
   },
-//   {id: 7,
-//     name: "Centaur",
-//     health: 740,
-//     armour: 2,
-//     healthRegen: 9,
-//     speed: 300,
-//     moves: [],
-//     fainted: false
-//   },
-//   {id: 8,
-//     name: "Chaos_Knight",
-//     health: 640,
-//     armour: 4,
-//     healthRegen: 3,
-//     speed: 320,
-//     moves: [],
-//     fainted: false
-//   },
+  {id: 7,
+    name: "Centaur",
+    health: 740,
+    armour: 2,
+    healthRegen: 9,
+    speed: 300,
+    moves: [CentaurMoves.HoofStomp, CentaurMoves.DoubleEdge, CentaurMoves.Retaliate, CentaurMoves.Stampede],
+    fainted: false
+  },
+  {id: 8,
+    name: "Chaos_Knight",
+    health: 640,
+    armour: 4,
+    healthRegen: 3,
+    speed: 320,
+    moves: [ChaosKnightMoves.ChaosBolt, ChaosKnightMoves.RealityRift, ChaosKnightMoves.ChaosStrike, ChaosKnightMoves.Phantasm],
+    fainted: false
+  },
 // // //WIP CLOCKWERK
 //   {id: 9,
 //     name: "Puck",
@@ -98,24 +106,24 @@ export const Heroes: Hero[] = [
 //     moves: [],
 //     fainted: false
 //   },
-//   {id: 11,
-//     name: "Dragon_Knight",
-//     health: 600,
-//     armour: 10,
-//     healthRegen: 5,
-//     speed: 295,
-//     moves: [],
-//     fainted: false
-//   },
-//   {id: 12,
-//     name: "Earth_Spirit",
-//     health: 640,
-//     armour: 3,
-//     healthRegen: 3,
-//     speed: 290,
-//     moves: [],
-//     fainted: false
-//   },
+  {id: 11,
+    name: "Dragon_Knight",
+    health: 600,
+    armour: 10,
+    healthRegen: 5,
+    speed: 295,
+    moves: [DragonKnightMoves.BreatheFire, DragonKnightMoves.DragonTail, DragonKnightMoves.DragonBlood, DragonKnightMoves.DragonForm],
+    fainted: false
+  },
+  {id: 12,
+    name: "Earth_Spirit",
+    health: 640,
+    armour: 3,
+    healthRegen: 3,
+    speed: 290,
+    moves: [EarthSpiritMoves.BoulderSmash, EarthSpiritMoves.RollingBoulder, EarthSpiritMoves.GeomagneticGrip, EarthSpiritMoves.Magnetize],
+    fainted: false
+  },
 //   {id: 13,
 //     name: "Earthshaker",
 //     health: 640,

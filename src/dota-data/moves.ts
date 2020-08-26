@@ -1,6 +1,5 @@
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
-import {Hero} from "../types/Hero"
 
 //ABBADON
 const MistCoil: HeroMove = {
@@ -178,8 +177,122 @@ const Warpath = {
   description: 'Bristle gets faster and quill spray deals more damage for 3 turns'
 }
 
+//CENTAUR MOVES
 
+const HoofStomp = {
+  name: 'Hoof Stomp',
+  damage: 30,
+  moveTypes: [MoveType.DAMAGE, MoveType.STUN],
+  description: 'Centaur stuns and damages target for a turn'
+}
 
+const DoubleEdge = {
+  name: 'Double Edge',
+  damage: 80,
+  moveTypes: [MoveType.DAMAGE, MoveType.SELF_INFLICT],
+  description: 'Centaur damages a hero himself'
+}
+
+const Retaliate = {
+  name: 'Retaliate',
+  damage: 10,
+  moveTypes: [MoveType.BLADE_MAIL],
+  description: 'When someone attacks Centaur, they take 10 damage'
+}
+
+const Stampede = {
+  name: 'Stampede',
+  damage: 0,
+  moveTypes: [MoveType.SPEED_INCREASE],
+  description: 'Increases speed for whole team for 3 turns'
+}
+
+// CHAOS KNIGHT
+const ChaosBolt = {
+  name: 'Chaos Bolt',
+  damage: 30,
+  moveTypes: [MoveType.STUN, MoveType.DAMAGE],
+  description: 'Stuns and damages an enemy Hero'
+}
+
+const RealityRift = {
+  name: 'Reality Rift',
+  damage: 20,
+  moveTypes: [MoveType.DAMAGE, MoveType.ARMOUR_REDUCTION],
+  description: 'Damages and reduces armour for a hero for 2 turns'
+}
+
+const ChaosStrike = {
+  name: 'Chaos Strike',
+  damage: 30,
+  moveTypes: [MoveType.DAMAGE, MoveType.LIFE_STEAL],
+  description: 'Deals damage to an enemy hero and heals Chaos Knight'
+}
+
+const Phantasm = {
+  name: 'Phantasm',
+  damage: 0,
+  moveTypes: [MoveType.ULTIMATE],
+  description: 'Give Chaos Knight a chance to use one of his other moves twice per turn'
+}
+
+//DRAGON KNIGHT MOVES
+const BreatheFire = {
+  name: 'Breathe Fire',
+  damage: 30,
+  moveTypes: [MoveType.DAMAGE, MoveType.DAMAGE_REDUCTION],
+  description: 'Damages enemy hero and lowers their attack'
+}
+
+const DragonTail = {
+  name: 'Dragon Tail',
+  damage: 30,
+  moveTypes: [MoveType.DAMAGE, MoveType.STUN],
+  description: 'Damages enemy hero and stun for 1 turn'
+}
+
+const DragonBlood = {
+  name: 'Dragon Blood',
+  damage: 0,
+  moveTypes: [MoveType.ARMOUR_INCREASE],
+  description: 'Raises Dragon Knights armour for 4 turns'
+}
+
+const DragonForm = {
+  name: 'Dragon Form',
+  damage: 0,
+  moveTypes: [MoveType.ULTIMATE, MoveType.TRANSFORM, MoveType.DOT],
+  description: 'Transforms the knight into a dragon and all moves make heroes burn for 20% of the damage taken for 3 turns'
+}
+
+//EARTHSPIRITS MOVES
+const BoulderSmash = {
+  name: 'Boulder Smash',
+  damage: 15,
+  moveTypes: [MoveType.SLOW, MoveType.DAMAGE, MoveType.AOE],
+  description: 'Damages and slows both enemy heroes'
+}
+
+const RollingBoulder = {
+  name: 'Rolling Boulder',
+  damage: 20,
+  moveTypes: [MoveType.DAMAGE, MoveType.STUN, MoveType.AOE],
+  description: 'Stuns and damages both enemy heroes'
+}
+
+const GeomagneticGrip = {
+  name: 'Geomagnetic Grip',
+  damage: 0,
+  moveTypes: [MoveType.SHIELD],
+  description: 'Earth Spirit pulls ally out of the way to dodge incoming attacks'
+}
+
+const Magnetize = {
+  name: 'Magnetize',
+  damage: 0,
+  moveTypes: [MoveType.ULTIMATE],
+  description: 'Earth spirit makes all moves AOE for 3 turns'
+}
 
 export const AbbadonMoves = {MistCoil, AphoticSheild, CurseOfAvernus, BorrowedTime}
 export const AlchemistMoves = {AcidSpray, UnstableConcoction, GreevilsGreed, ChemicalRage}
@@ -187,3 +300,7 @@ export const AxeMoves = {BeserkersCall, BattleHunger, CounterHelix, CullingBlade
 export const BeastMasterMoves = {WildAxes, CallOfTheWild, InnerBeast, PrimalRoar}
 export const BrewMasterMoves = {ThunderClap, CinderBrew, DrunkenBrawler, PrimalSpirit}
 export const BristlebackMoves = {ViscousNasalGoo, QuillSpray, Bristleback, Warpath}
+export const CentaurMoves = {HoofStomp, DoubleEdge, Retaliate, Stampede}
+export const ChaosKnightMoves = {ChaosBolt, RealityRift, ChaosStrike, Phantasm}
+export const DragonKnightMoves = {BreatheFire, DragonTail, DragonBlood, DragonForm}
+export const EarthSpiritMoves = {BoulderSmash, RollingBoulder, GeomagneticGrip, Magnetize}

@@ -7,5 +7,15 @@ export enum MoveType {
   TAUNT = 'taunt',
   BUFF = 'buff',
   ULTIMATE = 'ultimate',
-  DAMAGE_AMP = 'damage_amp'
+  DAMAGE_AMP = 'damage_amp',
+  SELF_INFLICT = 'self_inflict',
+  BLADE_MAIL = 'blade_mail',
+  SPEED_INCREASE = 'speed_increase',
+  ARMOUR_REDUCTION = 'armour_reduction',
+  LIFE_STEAL = 'life_steal',
+  DAMAGE_REDUCTION = 'damage_reduction',
+  ARMOUR_INCREASE = 'armour_increase',
+  TRANSFORM = 'transform',
+  DOT = 'dot',
+  AOE = 'aoe'
 }
