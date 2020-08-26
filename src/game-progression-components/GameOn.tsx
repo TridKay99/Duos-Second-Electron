@@ -56,6 +56,7 @@ export type GameOnState = {
   turnNumber: number
   beginTurn: boolean
   allTurns: AllPlayersStoredTurns
+  battleMessageKey: number
 }
 
 export class GameOn extends React.Component<Props, GameOnState> {
@@ -94,6 +95,7 @@ export class GameOn extends React.Component<Props, GameOnState> {
         turnParams: []
       }
     },
+    battleMessageKey: 0
   }
 
   componentDidUpdate = () => {
@@ -163,13 +165,13 @@ export class GameOn extends React.Component<Props, GameOnState> {
             <Grid.Column>
               <Button color='blue'
                       content={topHero.name}
-                      onClick={() => this.attackEnemyNew(move, attackingHero, topHero, playerNumber, playerContent)}
+                      onClick={() => this.attackEnemyNew(move, attackingHero, topHero, playerNumber)}
                       fluid />
             </Grid.Column>
             <Grid.Column>
               <Button color='blue'
                       content={bottomHero.name}
-                      onClick={() => this.attackEnemyNew(move, attackingHero, bottomHero, playerNumber, playerContent)}
+                      onClick={() => this.attackEnemyNew(move, attackingHero, bottomHero, playerNumber)}
                       fluid />
             </Grid.Column>
           </Grid.Row>
@@ -178,7 +180,7 @@ export class GameOn extends React.Component<Props, GameOnState> {
     )
   }
 
-  attackEnemyNew = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, playerNumber: Player, playerContent: PlayerContent) => {
+  attackEnemyNew = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, playerNumber: Player) => {
     if(move.moveTypes.includes(MoveType.DAMAGE)) {
       const turns = TurnService.basicAttack(
         this.state.allTurns,
@@ -186,7 +188,6 @@ export class GameOn extends React.Component<Props, GameOnState> {
         attackingHero,
         attackedHero,
         playerNumber,
-        playerContent,
         this.attackEnemy)
       if(turns) {
         this.setState({allTurns: turns})
@@ -220,10 +221,11 @@ export class GameOn extends React.Component<Props, GameOnState> {
   }
 
   sendBattleMessage = (move: HeroMove, attackingHero: Hero, attackedHero: Hero) => {
-    const newMessage = attackedHero.health > 0
-      ? <Message content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
-      : <Message error content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage. ${attackedHero.name} is fucking dead!`} size={'small'}/>
+    const {battleMessageKey} = this.state
 
+    const newMessage = attackedHero.health > 0
+      ? <Message key={battleMessageKey} content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage.`} size={'small'}/>
+      : <Message key ={battleMessageKey} error content={`${attackingHero.name} attacked ${attackedHero.name} with ${move.name} doing ${move.damage} damage. ${attackedHero.name} is fucking dead!`} size={'small'}/>
     let battleMessages = this.state.battleMessages.concat(newMessage)
 
     if(battleMessages.length > 7) {
@@ -231,7 +233,7 @@ export class GameOn extends React.Component<Props, GameOnState> {
       battleMessages = battleMessages.filter(message => message !== messageToRemove)
     }
 
-    this.setState({battleMessages})
+    this.setState({battleMessages, battleMessageKey: battleMessageKey + 1})
   }
 
   render() {

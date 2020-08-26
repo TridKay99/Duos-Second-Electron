@@ -1,9 +1,8 @@
 import {HeroMove} from "../types/HeroMove"
 import {Hero} from "../types/Hero"
 import {AllPlayersStoredTurns, BattlePosition, Player, StoredTurn} from "../game-progression-components/GameOn"
-import {ActiveHeroes, PlayerContent} from "../game-progression-components/PlayDotaDuos"
+import {ActiveHeroes} from "../game-progression-components/PlayDotaDuos"
 import _ from "lodash"
-
 
 export const TurnService = {
   basicAttack: (allTurns: AllPlayersStoredTurns,
@@ -11,13 +10,10 @@ export const TurnService = {
                 attackingHero: Hero,
                 attackedHero: Hero,
                 player: Player,
-                playerContent: PlayerContent,
                 func: any) => {
 
     let heroToMatch = Object.values(allTurns).find(it => _.isEqual(it.hero?.name, attackingHero.name))
-    Object.values(allTurns).find(it => console.log(it.hero))
-    console.log('attackingHero', attackingHero)
-    console.log('heroToMatch', heroToMatch)
+
     if(heroToMatch) {
       if( heroToMatch.position === BattlePosition.PLAYER_ONE_TOP){return TurnService.playerOneTopTurn(allTurns, attackingHero, attackedHero, move, func, player)}
       else if(heroToMatch.position === BattlePosition.PLAYER_ONE_BOT){return TurnService.playerOneBotTurn(allTurns, attackingHero, attackedHero, move, func, player)}

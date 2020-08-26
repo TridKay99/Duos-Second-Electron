@@ -1,6 +1,7 @@
 import React from 'react'
 import {Grid, Message} from "semantic-ui-react"
-import {HeroImageUrl, ImageSize} from "../../dota-data/heroes"
+import {HeroImageUrl} from "../../dota-data/heroes"
+import {ImageSize} from "../../enums/ImageSize"
 
 export class MessagesAndSwitchHero extends React.Component {
 
