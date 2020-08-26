@@ -8,8 +8,7 @@ import {MoveDamageService} from "../services/MoveDamageService"
 import {Hero} from "../types/Hero"
 import {HeroMove} from "../types/HeroMove"
 import {MoveType} from "../enums/MoveType"
-import {TurnService} from "../services/TurnService"
-import {SpeedService} from "../services/SpeedService"
+import {TurnService, TurnType} from "../services/TurnService"
 import {GameOnHeader} from "./game-board/GameOnHeader"
 import {PlayerOneBoard} from "./game-board/PlayerOneBoard"
 import {PlayerTwoBoard} from "./game-board/PlayerTwoBoard"
@@ -35,7 +34,8 @@ export type StoredTurn = {
   turnSelected: boolean,
   //TURN WILL BE ANYTHING FROM USING AN ATTACK MOVE -> SWITCHING HEROES
   turn: any | null,
-  turnParams: any[]
+  turnParams: any[],
+  turnType: TurnType | null
 }
 
 export type AllPlayersStoredTurns = {
@@ -71,28 +71,32 @@ export class GameOn extends React.Component<Props, GameOnState> {
         hero: this.props.playerOne.activeHeroes.top,
         turnSelected: false,
         turn: null,
-        turnParams: []
+        turnParams: [],
+        turnType: null
       },
       playerOneBottom: {
         position: BattlePosition.PLAYER_ONE_BOT,
         hero: this.props.playerOne.activeHeroes.bottom,
         turnSelected: false,
         turn: null,
-        turnParams: []
+        turnParams: [],
+        turnType: null
       },
       playerTwoTop: {
         position: BattlePosition.PLAYER_TWO_TOP,
         hero: this.props.playerTwo.activeHeroes.top,
         turnSelected: false,
         turn: null,
-        turnParams: []
+        turnParams: [],
+        turnType: null
       },
       playerTwoBottom: {
         position: BattlePosition.PLAYER_TWO_BOT,
         hero: this.props.playerTwo.activeHeroes.bottom,
         turnSelected: false,
         turn: null,
-        turnParams: []
+        turnParams: [],
+        turnType: null
       }
     },
     battleMessageKey: 0
@@ -110,27 +114,14 @@ export class GameOn extends React.Component<Props, GameOnState> {
 
     if(this.state.beginTurn) {
       this.setState({beginTurn: false})
-      const heroesInOrderOfSpeed = SpeedService.setTurnsBySpeed(allTurns)
-      heroesInOrderOfSpeed[0].turn(heroesInOrderOfSpeed[0].turnParams[0],heroesInOrderOfSpeed[0].turnParams[1], heroesInOrderOfSpeed[0].turnParams[2], heroesInOrderOfSpeed[0].turnParams[3])
+      TurnService.runTurns(allTurns)
 
       setTimeout(() => {
-        heroesInOrderOfSpeed[1].turn(heroesInOrderOfSpeed[1].turnParams[0], heroesInOrderOfSpeed[1].turnParams[1], heroesInOrderOfSpeed[1].turnParams[2], heroesInOrderOfSpeed[1].turnParams[3])
-      }, 2000)
-
-      setTimeout(() => {
-        heroesInOrderOfSpeed[2].turn(heroesInOrderOfSpeed[2].turnParams[0], heroesInOrderOfSpeed[2].turnParams[1], heroesInOrderOfSpeed[2].turnParams[2], heroesInOrderOfSpeed[2].turnParams[3])
-      }, 4000)
-
-      setTimeout(() => {
-        heroesInOrderOfSpeed[3].turn(heroesInOrderOfSpeed[3].turnParams[0], heroesInOrderOfSpeed[3].turnParams[1], heroesInOrderOfSpeed[3].turnParams[2], heroesInOrderOfSpeed[3].turnParams[3],
-        this.setState({turnNumber: this.state.turnNumber + 1}))
-      }, 6000)
-
-      // setTimeout(() => {
-      //   let playerOne = {...this.props.playerOne}
-      //   TurnService.regenHealth(playerOne.activeHeroes)
-      //   this.props.handleChange({playerOne: playerOne})
-      // }, 8000)
+        // let playerOne = {...this.props.playerOne}
+        // TurnService.regenHealth(playerOne.activeHeroes)
+        // this.props.handleChange({playerOne: playerOne})
+        this.setState({turnNumber: this.state.turnNumber + 1})
+      }, 6001)
 
       const allTurnsWiped = TurnService.wipeAllTurns(allTurns)
       this.setState({allTurns: allTurnsWiped})
@@ -182,7 +173,7 @@ export class GameOn extends React.Component<Props, GameOnState> {
 
   attackEnemyNew = (move: HeroMove, attackingHero: Hero, attackedHero: Hero, playerNumber: Player) => {
     if(move.moveTypes.includes(MoveType.DAMAGE)) {
-      const turns = TurnService.basicAttack(
+      const turns = TurnService.setBasicAttack(
         this.state.allTurns,
         move,
         attackingHero,
