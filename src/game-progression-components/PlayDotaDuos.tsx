@@ -76,8 +76,9 @@ export class PlayDotaDuos extends React.Component<{}, GamePlayState> {
     this.setState(this.state)
   }
 
-  chooseHeroes = (hero: Hero) => {
+  chooseHeroes = (hero: Hero, index: number) => {
     return <Button className={'hero_button_ingame'}
+                   key={index}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
                    onClick={() => this.addToTeam(hero, HeroImageUrl(hero.name, ImageSize.SMALL))}
     />

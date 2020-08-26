@@ -28,8 +28,9 @@ export class SwitchHeroButton extends React.Component<Props, State> {
     isSwapHeroModalOpen: false
   }
 
-  renderHeroButtonsForSwitch = (hero: Hero) => {
+  renderHeroButtonsForSwitch = (hero: Hero, index: number) => {
     return <Button className={'hero_button_ingame'}
+                   key={index}
                    disabled={_.isEqual(hero, this.props.player.activeHeroes.top) || _.isEqual(hero, this.props.player.activeHeroes.bottom) || hero.fainted}
                    content={<img src={HeroImageUrl(hero.name, ImageSize.SMALL)} alt={''}/>}
                    onClick={() => this.onSwapHero(hero)}
@@ -105,8 +106,8 @@ export class SwitchHeroButton extends React.Component<Props, State> {
                   onClick={() => this.setState({isSwapHeroModalOpen: false})}/>
         </Modal.Header>
         <Modal.Content textAlign={'center'}>
-          {this.props.player.heroes.map((hero) => {
-            return this.renderHeroButtonsForSwitch(hero)
+          {this.props.player.heroes.map((hero, index) => {
+            return this.renderHeroButtonsForSwitch(hero, index)
           })}
         </Modal.Content>
       </Modal>

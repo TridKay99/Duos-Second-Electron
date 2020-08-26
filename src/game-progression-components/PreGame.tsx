@@ -10,14 +10,16 @@ type Props = {
   playerOne: PlayerContent
   playerTwo: PlayerContent
   isReadyToPlay: boolean
-  chooseHeroes: (hero: Hero) => void
+  chooseHeroes: (hero: Hero, index: number) => void
   handleChange: (delta: RecursivePick<GamePlayState>) => void
 }
 
 export class PreGame extends React.Component<Props> {
 
-  createHeroImg = (imageUrl: string) => {
-    return <img src={`${imageUrl}`} alt={''}/>
+  createHeroImg = (imageUrl: string, index: number) => {
+    return <img src={`${imageUrl}`}
+                alt={''}
+                key={index}/>
   }
 
   render() {
@@ -35,22 +37,22 @@ export class PreGame extends React.Component<Props> {
         <Grid.Row columns={2}>
           <Grid.Column width={8} textAlign={'right'} className={'player_one_picked_heroes'}>
             <Header textAlign={'right'} color={'grey'}>Player One</Header>
-            {playerOne.heroImages.map((imageUrl) => {
-              return this.createHeroImg(imageUrl)
+            {playerOne.heroImages.map((imageUrl, index) => {
+              return this.createHeroImg(imageUrl, index)
             })}
           </Grid.Column>
           <Grid.Column width={8} textAlign={'left'} className={'player_two_picked_heroes'}>
             <Header textAlign={'left'} color={'grey'}>Player Two</Header>
-            {playerTwo.heroImages.map((imageUrl) => {
-              return this.createHeroImg(imageUrl)
+            {playerTwo.heroImages.map((imageUrl, index) => {
+              return this.createHeroImg(imageUrl, index)
             })}
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={3}>
           <Grid.Column width={3}/>
           <Grid.Column width={10}>
-            {Heroes.map((hero) => {
-              return this.props.chooseHeroes(hero)
+            {Heroes.map((hero, index) => {
+              return this.props.chooseHeroes(hero, index)
             })}
           </Grid.Column>
           <Grid.Column width={1}/>

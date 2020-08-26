@@ -144,16 +144,17 @@ export class GameOn extends React.Component<Props, GameOnState> {
   }
 
   renderMoveButtons = (moves: HeroMove[], attackingHero: Hero, player: PlayerContent) => {
-    return moves.map((move) => {
+    return moves.map((move, index) => {
       return player.player === Player.ONE
-        ? this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!, Player.ONE, this.props.playerOne)
-        : this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!, Player.TWO, this.props.playerTwo)
+        ? this.whoToAttack(move, attackingHero, this.props.playerTwo.activeHeroes.top!, this.props.playerTwo.activeHeroes.bottom!, Player.ONE, this.props.playerOne, index)
+        : this.whoToAttack(move, attackingHero, this.props.playerOne.activeHeroes.top!, this.props.playerOne.activeHeroes.bottom!, Player.TWO, this.props.playerTwo, index)
     })
   }
 
-  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero, playerNumber: Player, playerContent: PlayerContent) => {
+  whoToAttack = (move: HeroMove, attackingHero: Hero, topHero: Hero, bottomHero: Hero, playerNumber: Player, playerContent: PlayerContent, index: number) => {
     return (
       <Popup wide
+             key={index}
              trigger={
                <Button color={"blue"}
                        content={`${move.name}`}/>} on={'click'}>
